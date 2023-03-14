@@ -5,18 +5,18 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const MeScreen = () => (
   <View style={styles.container}>
     {/* <Text style={styles.text}>Me</Text> */}
-    <TouchableOpacity style={styles.button}>
-       <Text style={styles.settings}><Icon style={styles.icon} name="create" color="coolGray.200" size={20}/> Edit Profile</Text>  
+    <TouchableOpacity style={styles.button}> 
+       <Text style={styles.settings}><Icon style={styles.icon} name="create" size={20}/> Edit Profile</Text>  
     </TouchableOpacity>
     <TouchableOpacity style={styles.button}>
-       <Text style={styles.settings}><Icon style={styles.icon} name="trending-up" color="coolGray.200" size={20}/> Stats</Text>  
+       <Text style={styles.settings}><Icon style={styles.icon} name="trending-up" size={20}/> Stats</Text>  
     </TouchableOpacity>
     <TouchableOpacity style={styles.button}>
-       <Text style={styles.settings}><Icon style={styles.icon} name="heart" color="coolGray.200" size={20}/> Favourite Courses</Text>  
+       <Text style={styles.settings}><Icon style={styles.icon} name="heart" size={20}/> Favourite Courses</Text>  
     </TouchableOpacity>
   </View>
 );
-
+ 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   },
   button: {
     justifyContent: 'center', 
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF', 
     marginTop: 2,
     padding: 10,
     width: 400,

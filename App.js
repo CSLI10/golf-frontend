@@ -9,6 +9,7 @@ import CoursesScreen from './screens/CoursesScreen';
 import HomeScreen from './screens/HomeScreen';
 import MeScreen from './screens/MeScreen';
 import PlayScreen from './screens/PlayScreen';
+import HoleScreen from './screens/HoleScreen';
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,7 @@ export default function App() {
             <Stack.Screen name="MeScreen" component={MeScreen} />
             <Stack.Screen name="PlayScreen" component={PlayScreen} />
             <Stack.Screen name="ShowCourseScreen" component={ShowCourseScreen} />
+            <Stack.Screen name="HoleScreen" component={HoleScreen} />
         </Stack.Navigator>
       </NavigationContainer>
       {/* <NavigationContainer>

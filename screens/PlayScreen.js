@@ -15,19 +15,19 @@ const SearchBar = ({ onSearch }) => {
   
     return (
       <View style={styles.container2}>
-        <TextInput
+        <TextInput 
           style={styles.input}
           value={search}
           onChangeText={(text) => setSearch(text)}
           placeholder='Where are you playing??'
         />
         <Button title='Search' onPress={() => onSearch(search)} />
-      </View>
+      </View> 
     );
   };
 
 const styles = StyleSheet.create({
-  container: {
+  container: { 
     flex: 1,
     alignItems: 'center',
   },

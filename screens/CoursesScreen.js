@@ -13,7 +13,7 @@ const CoursesScreen = ( { navigation }) => {
       .then((response) => {
         // console.log(response.data);
         setCourses(response.data);
-      })
+      })  
       .catch((err) => {
         console.error(err);
       });
@@ -27,7 +27,7 @@ const CoursesScreen = ( { navigation }) => {
             data={courses}
             keyExtractor={(item) => item.name.toString()}
             renderItem={({ item }) => (
-              <CourseSquare name={item.name} location={item.location} rating={item.rating} _id={item._id} onPress={() => navigation.navigate('ShowCourseScreen', { _id: item.id })} />
+              <CourseSquare name={item.name} location={item.location} rating={item.rating} onPress={() => navigation.navigate('ShowCourseScreen', { _id: item._id, course: item })} />
             )}
           />
         </View>

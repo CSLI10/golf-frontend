@@ -1,34 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, Image } from 'react-native';
+import HoleCard from '../components/HoleCard';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const ShowCourseScreen = ({ navigation, route }) => {
+const HoleScreen = ({ navigation, route }) => {
   // const [course, setCourse] = useState();
   const {_id, course}  = route.params;
+  const [holes, setHoles] = useState(null)
+  const [currentHole, setCurrentHole] = useState(7)
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`https://golf-backend-app.vercel.app/api/courses/${_id}`)
-  //     .then((response) => {
-  //       console.log(response.data);
-  //       // setCourse(response.data);
-  //       console.log(_id)
-  //       console.log(course)
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // }, []);
+  useEffect(() => {
+    setHoles(course.scorecard)
+  }, []);
 
       return (
         <View style={styles.card}>
-          <Image style={styles.stretch} src={course.image_path[1]}/>
-          <Text style={styles.name}>{course.name}</Text> 
-          <Text style={styles.location}>{course.location}</Text>
-          <Text style={styles.description} numberOfLines={0}>{course.description}</Text>
+          <Image style={styles.stretch} src={course.image_path[0]}/>
           <View style={styles.row}>
-            <Button title={'Play'} onPress={() => navigation.navigate('HoleScreen', { course: course })}/>
-            <Button title={'Website'}/>
+            <Text style={styles.name}>{course.name}</Text> 
+            <MaterialCommunityIcons name="golf" size={40} color="black" />
           </View>
+          <HoleCard scorecard={course.scorecard} i={currentHole} />
         </View>
       );
       }
@@ -50,12 +42,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: 10,
-    paddingLeft: 10
+    paddingLeft: '18%',
+    paddingRight: 10
   },
   location: {
     fontSize: 14,
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: '28%',
     color: '#4b4b4b'
   },
   description: {
@@ -84,11 +76,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 250,
     resizeMode: 'stretch',
+    marginBottom: 10
   },
   row: {
-    flexDirection: 'row',
-    marginLeft: '32%'
+    flexDirection: 'row'
   }
 });
 
-export default ShowCourseScreen;
+export default HoleScreen;

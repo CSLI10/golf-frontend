@@ -2,15 +2,15 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { VStack, Center, Skeleton, ScrollView } from 'native-base';
 
-const HomeScreen = () => (
+const HomeScreen = ( { navigation } ) => (
   <View style={styles.container}>
     <Text style={styles.text}>Feed</Text>
     <ScrollView>
-    <VStack space={4} >
+    <VStack space={4} > 
       <Center w="400">
       <VStack w="90%" maxW="400" borderWidth="1" space={8} overflow="hidden" rounded="md" _dark={{
       borderColor: 'coolGray.500'
-    }} _light={{
+    }} _light={{ 
       borderColor: 'coolGray.200'
     }}>
         <Skeleton h="20" />
