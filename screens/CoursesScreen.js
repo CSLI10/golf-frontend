@@ -21,7 +21,7 @@ const CoursesScreen = ( { navigation }) => {
 
         return (
         <View style={styles.container}>
-          <Text style={styles.text}>Courses in Ireland</Text>
+          <Text style={styles.text}>Courses in Ireland</Text> 
           <SearchBar />
           <FlatList
             data={courses}

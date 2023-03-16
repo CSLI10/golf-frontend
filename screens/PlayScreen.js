@@ -1,14 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
 import MapView from 'react-native-maps';
+import axios from 'axios';
+import PlayCard from '../components/PlayCard';
 
-const PlayScreen = () => (
-  <View style={styles.container}>
-    <Text style={styles.text}>Start a round</Text>
-    <SearchBar/>
-    <MapView style={styles.map}/>
-  </View>
-);
+
+
+const PlayScreen = ({ navigation }) => {
+  const [courses, setCourses] = useState({ });
+
+  useEffect(() => {
+    axios
+      .get("https://golf-backend-app.vercel.app/api/courses")
+      .then((response) => {
+        // console.log(response.data);
+        setCourses(response.data);
+        console.log(courses[0]) 
+      })  
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+ 
+
+  return(
+    <View style={styles.container}>
+      <Text style={styles.text}>Start a round</Text>
+      <SearchBar/>
+      <PlayCard course={courses[0]} onPress={() => navigation.navigate('HoleScreen', {  course: courses[0] })}/>
+      <MapView style={styles.map}/>
+    </View>
+  )
+};
+
+
 
 const SearchBar = ({ onSearch }) => {
     const [search, setSearch] = useState(''); 

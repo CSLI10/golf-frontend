@@ -10,6 +10,7 @@ import HomeScreen from './screens/HomeScreen';
 import MeScreen from './screens/MeScreen';
 import PlayScreen from './screens/PlayScreen';
 import HoleScreen from './screens/HoleScreen';
+import PlayCard from './components/PlayCard';
 
 const Stack = createStackNavigator();
 

@@ -20,7 +20,7 @@ const ShowCourseScreen = ({ navigation, route }) => {
   // }, []);
 
       return (
-        <View style={styles.card}>
+        <View style={styles.card}> 
           <Image style={styles.stretch} src={course.image_path[1]}/>
           <Text style={styles.name}>{course.name}</Text> 
           <Text style={styles.location}>{course.location}</Text>

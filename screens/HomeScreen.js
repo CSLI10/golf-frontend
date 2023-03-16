@@ -34,7 +34,7 @@ const HomeScreen = ( { navigation } ) => (
     <Center w="400">
       <VStack w="90%" maxW="400" borderWidth="1" space={8} overflow="hidden" rounded="md" _dark={{
       borderColor: 'coolGray.500'
-    }} _light={{
+    }} _light={{ 
       borderColor: 'coolGray.200'
     }}>
         <Skeleton h="20" />

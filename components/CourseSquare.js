@@ -13,7 +13,7 @@ const CourseSquare = ({ name, location, rating, onPress }) => {
 //     <VStack space="4" divider={<Divider />}> 
 //       <Box px="4" pt="4">
 //         {name}
-//       </Box>
+//       </Box> 
 //       <Box px="4">
 //         {location} 
 //       </Box>
