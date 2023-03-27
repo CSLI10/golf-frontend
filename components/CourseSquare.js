@@ -20,7 +20,7 @@ const CourseSquare = ({ name, location, rating, onPress }) => {
 //       <Box px="4" pb="4"> 
 //         {rating} 
 //       </Box>
-//     </VStack>
+//     </VStack> 
 //   </Box>
   );
 };

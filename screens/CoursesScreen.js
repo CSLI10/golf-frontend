@@ -10,9 +10,9 @@ const CoursesScreen = ( { navigation }) => {
   useEffect(() => {
     axios
       .get("https://golf-backend-app.vercel.app/api/courses")
-      .then((response) => {
+      .then(async (response) => {
         // console.log(response.data);
-        setCourses(response.data);
+        await setCourses(response.data);
       })  
       .catch((err) => {
         console.error(err);
@@ -20,14 +20,14 @@ const CoursesScreen = ( { navigation }) => {
   }, []);
 
         return (
-        <View style={styles.container}>
+        <View style={styles.container}> 
           <Text style={styles.text}>Courses in Ireland</Text> 
           <SearchBar />
           <FlatList
             data={courses}
             keyExtractor={(item) => item.name.toString()}
             renderItem={({ item }) => (
-              <CourseSquare name={item.name} location={item.location} rating={item.rating} onPress={() => navigation.navigate('ShowCourseScreen', { _id: item._id, course: item })} />
+              <CourseSquare name={item.name} location={item.location} rating={item.rating} onPress={() => navigation.navigate('ShowCourseScreen', { id: item._id })} />
             )}
           />
         </View>

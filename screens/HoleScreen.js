@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, Image } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import Par4Card from '../components/Par4Card';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Par3Card from '../components/Par3Card';
@@ -79,8 +79,6 @@ const HoleScreen = ({ navigation, route }) => {
             <PrevButton />
             <NextButton />
           </View>
-
-          {/* <HoleCard scorecard={course.scorecard} i={currentHole} /> */}
           <CardHole scorecard={course.scorecard} i={currentHole} />
         </View>
       );
