@@ -1,8 +1,179 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, StyleSheet, View, Button, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+ 
+const Par4Card = ({ scorecard, i, handleForm }) => {
+  const [oneScore, setOneScore] = useState(null);
+  const [fairway, setFairway] = useState(null);
+  const [green, setGreen] = useState(null);
+  const [putts, setPutts] = useState(null);
 
-const Par4Card = ({ scorecard, i }) => {
+  const ShowScores = () => { 
+    if(oneScore !== null){
+      return(
+        <TouchableOpacity style={styles.oneScore} onPress={() => {setOneScore(null); handleForm("score", i, null)}}>
+           <MaterialCommunityIcons name={oneScore} size={70} color="black" />
+        </TouchableOpacity>
+      )
+    }
+    return(
+      <>
+      <View style={styles.iconsRow}> 
+          <TouchableOpacity onPress={() => {setOneScore("numeric-1-circle"); handleForm("score", i, 1)}}>
+              <MaterialCommunityIcons name="numeric-1-circle" size={50} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {setOneScore("numeric-2-circle"); handleForm("score", i, 2)}}>
+              <MaterialCommunityIcons name="numeric-2-circle" size={50} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {setOneScore("numeric-3-circle-outline"); handleForm("score", i, 3)}}>
+              <MaterialCommunityIcons name="numeric-3-circle-outline" size={50} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {setOneScore("numeric-4"); handleForm("score", i, 4)}}>
+              <MaterialCommunityIcons name="numeric-4" size={50} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {setOneScore("numeric-5-box-outline"); handleForm("score", i, 5)}}>
+              <MaterialCommunityIcons name="numeric-5-box-outline" size={50} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {setOneScore("numeric-6-box"); handleForm("score", i, 6)}}>
+              <MaterialCommunityIcons name="numeric-6-box" size={50} color="black" />
+          </TouchableOpacity>
+      </View>
+      <View style={styles.iconsRow}>
+          <TouchableOpacity onPress={() => {setOneScore("numeric-7-box"); handleForm("score", i, 7)}}>
+              <MaterialCommunityIcons name="numeric-7-box" size={50} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {setOneScore("numeric-8-box"); handleForm("score", i, 8)}}>
+              <MaterialCommunityIcons name="numeric-8-box" size={50} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {setOneScore("numeric-9-box"); handleForm("score", i, 9)}}>
+              <MaterialCommunityIcons name="numeric-9-box" size={50} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {setOneScore("numeric-10-box-multiple"); handleForm("score", i, 10)}}>
+              <MaterialCommunityIcons name="numeric-10-box-multiple" size={50} color="black" />
+          </TouchableOpacity>
+          {/* <TouchableOpacity onPress={() => setOneScore("numeric-2-circle-outline")}>
+              <MaterialCommunityIcons name="dots-horizontal" size={50} color="black" />
+          </TouchableOpacity> */}
+      </View>
+      </>
+
+    )
+
+  }
+
+  const ShowFairways = () => {
+    if(fairway !== null){
+      return(
+        <>
+          <View style={styles.fairwaysRow}>
+             <Text style={styles.body}>Fairway Hit</Text>
+             <View style={styles.extrasRow}>
+                <TouchableOpacity onPress={() => {setFairway(null); handleForm("fairway", i, null)}}>
+                  <MaterialCommunityIcons name={fairway} size={40} color="black" />
+                </TouchableOpacity>
+              </View>
+          </View>
+        </>
+      )
+    }
+
+    return(
+      <>
+        <View style={styles.fairwaysRow}>
+           <Text style={styles.body}>Fairway Hit</Text>
+           <View style={styles.extrasRow}>
+              <TouchableOpacity onPress={() => {setFairway("arrow-top-left-thick"); handleForm("fairway", i, "missed_left")}}>
+                <MaterialCommunityIcons name="arrow-top-left-thick" size={40} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => {setFairway("check-bold"); handleForm("fairway", i, "yes")}}>
+                <MaterialCommunityIcons name="check-bold" size={35} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => {setFairway("arrow-top-right-thick"); handleForm("fairway", i, "missed_right")}}>
+                <MaterialCommunityIcons name="arrow-top-right-thick" size={40} color="black" />
+              </TouchableOpacity>
+            </View>
+        </View>
+      </>
+    )
+  }
+
+  const ShowGreens = () => {
+    if(green !== null){
+      return (
+        <>
+          <View style={styles.greensRow}>
+            <Text style={styles.body}>Green in Regulation</Text>
+            <TouchableOpacity onPress={() => {setGreen(null); handleForm("green", i, null)}}>
+              <MaterialCommunityIcons name={green} size={35} color="black" />
+            </TouchableOpacity>
+          </View>
+        </>
+      )
+    }
+    return(
+      <>
+        <View style={styles.greensRow}>
+          <Text style={styles.body}>Green in Regulation</Text>
+          <TouchableOpacity onPress={() => {setGreen("check-bold"); handleForm("green", i, "yes")}}>
+            <MaterialCommunityIcons name="check-bold" size={35} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {setGreen("close-circle-outline"); handleForm("green", i, "no")}}>
+            <MaterialCommunityIcons name="close-circle-outline" size={35} color="black" />
+          </TouchableOpacity>
+        </View>
+      </>
+    )
+  }
+
+  const ShowPutts = () => {
+    if(putts !== null){
+      return(
+        <>
+          <View style={styles.puttsRow}>
+          <Text style={styles.body}>Putts</Text>
+          <View style={styles.extrasRow2}>
+              <TouchableOpacity onPress={() => {setPutts(null); handleForm("putts", i, null)}}>
+                  <MaterialCommunityIcons name={putts} size={35} color="black" />
+              </TouchableOpacity>
+          </View>
+          </View>
+        </>
+      )
+    }
+
+    return(
+      <>
+      <View style={styles.puttsRow}>
+            <Text style={styles.body}>Putts</Text>
+            <View style={styles.extrasRow2}>
+               <TouchableOpacity onPress={() => {setPutts("numeric-0-circle-outline"); handleForm("putts", i, 0)}}>
+                    <MaterialCommunityIcons name="numeric-0-circle-outline" size={35} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {setPutts("numeric-1-circle-outline"); handleForm("putts", i, 1)}}>
+                    <MaterialCommunityIcons name="numeric-1-circle-outline" size={35} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {setPutts("numeric-2-circle-outline"); handleForm("putts", i, 2)}}>
+                    <MaterialCommunityIcons name="numeric-2-circle-outline" size={35} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {setPutts("numeric-3-circle-outline"); handleForm("putts", i, 3)}}>
+                    <MaterialCommunityIcons name="numeric-3-circle-outline" size={35} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {setPutts("numeric-4-circle-outline"); handleForm("putts", i, 4)}}>
+                    <MaterialCommunityIcons name="numeric-4-circle-outline" size={35} color="black" />
+                </TouchableOpacity>
+                {/* <TouchableOpacity onPress={() => setPutts("plus-circle-outline") && handleForm("putts", i, 5)}>
+                    <MaterialCommunityIcons name="plus-circle-outline" size={35} color="black" />
+                </TouchableOpacity> */}
+            </View>
+        </View>
+      </>
+    )
+
+  }
+
+
+
+
   return (
     <View style={styles.card}>
         <Text style={styles.hole}>Hole: {scorecard[i].hole}</Text> 
@@ -11,89 +182,13 @@ const Par4Card = ({ scorecard, i }) => {
             <Text style={styles.par}>{scorecard[i].yards} yards</Text>
             <Text style={styles.par}>Index {scorecard[i].index}</Text>
         </View>
-        <View style={styles.iconsRow}> 
-            <TouchableOpacity>
-                <MaterialCommunityIcons name="numeric-1-circle" size={50} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <MaterialCommunityIcons name="numeric-2-circle" size={50} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <MaterialCommunityIcons name="numeric-3-circle-outline" size={50} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <MaterialCommunityIcons name="numeric-4" size={50} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <MaterialCommunityIcons name="numeric-5-box-outline" size={50} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <MaterialCommunityIcons name="numeric-6-box" size={50} color="black" />
-            </TouchableOpacity>
-        </View>
-        <View style={styles.iconsRow}>
-            <TouchableOpacity>
-                <MaterialCommunityIcons name="numeric-7-box" size={50} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <MaterialCommunityIcons name="numeric-8-box" size={50} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <MaterialCommunityIcons name="numeric-9-box" size={50} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <MaterialCommunityIcons name="numeric-10-box-multiple" size={50} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <MaterialCommunityIcons name="dots-horizontal" size={50} color="black" />
-            </TouchableOpacity>
-        </View>
-        <View style={styles.fairwaysRow}>
-            <Text style={styles.body}>Fairway Hit</Text>
-            <View style={styles.extrasRow}>
-                <TouchableOpacity>
-                    <MaterialCommunityIcons name="arrow-top-left-thick" size={40} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <MaterialCommunityIcons name="check-bold" size={35} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <MaterialCommunityIcons name="arrow-top-right-thick" size={40} color="black" />
-                </TouchableOpacity>
-            </View>
-        </View>
-        <View style={styles.greensRow}>
-            <Text style={styles.body}>Green in Regulation</Text>
-            <TouchableOpacity>
-                <MaterialCommunityIcons name="check-bold" size={35} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-            <MaterialCommunityIcons name="close-circle-outline" size={35} color="black" />
-            </TouchableOpacity>
-        </View>
-        <View style={styles.puttsRow}>
-            <Text style={styles.body}>Putts</Text>
-            <View style={styles.extrasRow2}>
-                <TouchableOpacity>
-                    <MaterialCommunityIcons name="numeric-1-circle-outline" size={35} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <MaterialCommunityIcons name="numeric-2-circle-outline" size={35} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <MaterialCommunityIcons name="numeric-3-circle-outline" size={35} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <MaterialCommunityIcons name="numeric-4-circle-outline" size={35} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <MaterialCommunityIcons name="plus-circle-outline" size={35} color="black" />
-                </TouchableOpacity>
-            </View>
-        </View>
+        <ShowScores/>
+        <ShowFairways />
+        <ShowGreens />
+        <ShowPutts />
         <View style={styles.divider} />
         <View style={styles.button}>
-            <Button title="Enter Score" color="white"/> 
+            <Button title="Enter Score" color="white" onPress={handleForm}/> 
         </View>
         
         
@@ -173,6 +268,9 @@ const styles = StyleSheet.create({
         borderBottomColor: '#6e6e6e',
         borderBottomWidth: 1,
         marginTop: 15,
+      },
+      oneScore: {
+        alignItems:'center'
       }
 });
 

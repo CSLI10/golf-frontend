@@ -13,7 +13,7 @@ export default function BottomTabNavigator() {
   return (
     <Tab.Navigator>
         <Tab.Screen 
-         name="Home"  
+         name="Home"   
          component={HomeScreen}           
          options={{
             tabBarIcon: ({ focused, color, size }) => (

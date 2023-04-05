@@ -1,18 +1,30 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
+import { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, HStack } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { AuthContext } from '../context/AuthContext';
 
-const MeScreen = ({ navigation, setAuthenticated }) => {
+const MeScreen = ({ navigation, route }) => {
 
-  const logOut = async () => {
+  const {logout} = useContext(AuthContext)
+
+  // const logOut = async () => {
+  //   try {
+  //     await AsyncStorage.removeItem('token')
+  //     await AsyncStorage.removeItem('_id') 
+  //     route.params.setAuthenticated(0);
+  //     navigation.navigate('WelcomeScreen')
+  //   } catch (error) {
+  //     // Error retrieving data
+  //     console.log(error)
+  //   }
     // 
-    await AsyncStorage.removeItem('token')
-    await AsyncStorage.removeItem('_id')
-    // await console.log("token here    " + token)
-    // setAuthenticated(false)
-    navigation.navigate('WelcomeScreen')
-  }
+    // await AsyncStorage.removeItem('token')
+    // await AsyncStorage.removeItem('_id')
+    // route.params.setAuthenticated(0);
+    // navigation.navigate('WelcomeScreen')
+  // }
 
   return (
     <View style={styles.container}>
@@ -26,7 +38,7 @@ const MeScreen = ({ navigation, setAuthenticated }) => {
       <TouchableOpacity style={styles.button}>
          <Text style={styles.settings}><Icon style={styles.icon} name="heart" size={20}/> Favourite Courses</Text>  
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={logOut}>
+      <TouchableOpacity style={styles.button} onPress={() => {logout()}}>
          <Text style={styles.settings}><Icon style={styles.icon} name="log-out-outline" size={20}/> Sign Out</Text>  
       </TouchableOpacity>
     </View>

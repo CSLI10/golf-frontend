@@ -5,21 +5,31 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Par3Card from '../components/Par3Card';
 import Par5Card from '../components/Par5Card';
 import { TouchableOpacity } from 'react-native';
+const holesForm = require('../assets/holeScore.json').holes
 
 const HoleScreen = ({ navigation, route }) => {
   // const [course, setCourse] = useState();
   const {_id, course}  = route.params;
-  const [holes, setHoles] = useState(null)
-  const [currentHole, setCurrentHole] = useState(0)
+  const [holes, setHoles] = useState(null);
+  const [currentHole, setCurrentHole] = useState(0);
+  const [form, setForm] = useState(holesForm);
+
 
   useEffect(() => {
     setHoles(course.scorecard)
   }, []);
 
+  const handleForm = (prop, i, value) => { 
+    let newForm = [...form];
+    newForm[i][prop] = value;
+    setForm(newForm);
+    console.log(form);
+  }
+
   const prevHole = () => {
     if(currentHole >= 1){
         setCurrentHole(currentHole - 1);
-    }
+    } 
   }
 
   const nextHole = () => {
@@ -68,10 +78,12 @@ const HoleScreen = ({ navigation, route }) => {
 
 
 
+
+
       return (
         <View style={styles.card}>
           <Image style={styles.stretch} src={course.image_path[0]}/>
-          <View style={styles.row}>
+          <View style={styles.rowName}>
             <Text style={styles.name}>{course.name}</Text> 
             <MaterialCommunityIcons name="golf" size={40} color="black" /> 
           </View>
@@ -79,23 +91,25 @@ const HoleScreen = ({ navigation, route }) => {
             <PrevButton />
             <NextButton />
           </View>
-          <CardHole scorecard={course.scorecard} i={currentHole} />
+          <CardHole scorecard={course.scorecard} i={currentHole} handleForm={handleForm}/>
         </View>
       );
 }
 
-
-const CardHole = ({ scorecard, i }) => {
+const CardHole = ({ scorecard, i, handleForm }) => {
     if(scorecard[i].par === 4){
-        return  <Par4Card scorecard={scorecard} i={i} />
+        return  <Par4Card scorecard={scorecard} i={i} handleForm={handleForm}/>
     }
     else if(scorecard[i].par === 3){
-        return <Par3Card scorecard={scorecard} i={i} />
+        return <Par3Card scorecard={scorecard} i={i} handleForm={handleForm}/>
     }
     else if(scorecard[i].par === 5){
-        return <Par5Card scorecard={scorecard} i={i} />
+        return <Par5Card scorecard={scorecard} i={i} handleForm={handleForm}/>
     }
 }
+
+
+
 
 
 
@@ -156,6 +170,10 @@ const styles = StyleSheet.create({
     height: 250,
     resizeMode: 'stretch',
     marginBottom: 10
+  },
+  rowName: {
+    flexDirection: 'row',
+    paddingRight: '10%'
   },
   row: {
     flexDirection: 'row'

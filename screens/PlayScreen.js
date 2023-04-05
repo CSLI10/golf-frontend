@@ -1,82 +1,79 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, FlatList } from 'react-native';
 import MapView from 'react-native-maps';
 import axios from 'axios';
 import PlayCard from '../components/PlayCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 const PlayScreen = ({ navigation }) => {
   const [courses, setCourses] = useState(null);
   const [id, setID] = useState(null);
   const [user, setUser] = useState(null);
+  const [favCourse, setFavCourse] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // const id = AsyncStorage.getItem('_id');
+  const {userInfo} = useContext(AuthContext);
 
-  _retrieveData = async () => {
-    try {
-      const temp = await AsyncStorage.getItem('_id');
-      setID(temp);
-      if (id !== null) {
-        // We have data!!
-        console.log("FIrst" + id);
+  // const id = AsyncStorage.getItem('_id');  
+
+  const getFavourites = () => {
+    // let courses = [];
+    // console.log(courses)
+    // console.log(courses.length) 
         axios
-        .get(`https://golf-backend-app.vercel.app/api/users/${id}`)
+        .get(`https://golf-backend-app.vercel.app/api/courses/${userInfo.favourite_courses[0]}`)
         .then((response) => {
-          console.log(response.data.favourite_courses);
-          setUser(response.data);
-        })  
+          console.log(response.data);
+          // await setFavCourses(favCourses.push(response.data));  
+          setFavCourse(response.data);
+          setIsLoading(false);
+        })
         .catch((err) => {
           console.error(err);
         });
-      }
-    } catch (error) {
-      // Error retrieving data
-    }
-  };
-
-  // getUser = () => {
-  //   axios
-  //   .get(`https://golf-backend-app.vercel.app/api/users${id}`)
-  //   .then((response) => {
-  //     console.log(response.data);
-  //     setUser(response.data);
-  //   })  
-  //   .catch((err) => {
-  //     console.error(err);
-  //   });
-  // }
+  }
 
   useEffect(() => {
-    _retrieveData();
+    getFavourites();
 
-    axios
-      .get("https://golf-backend-app.vercel.app/api/courses") 
-      .then((response) => {
-        // console.log(response.data);
-        setCourses(response.data);
-        // console.log(courses[0]) 
-        console.log("second" + id)
-      })  
-      .catch((err) => {
-        console.error(err);
-      });
+    // axios
+    //   .get("https://golf-backend-app.vercel.app/api/courses")
+    //   .then((response) => {
+    //     // console.log(response.data);
+    //     setCourses(response.data);
+    //     // console.log(courses[0]) 
+    //     console.log("second" + id)
+    //     setIsLoading(false)
+    //   })  
+    //   .catch((err) => {
+    //     console.error(err); 
+    //   });
   }, []);
+
  
-  if(courses != null){
+  if(isLoading){
     return(
-      <View style={styles.container}>
-        <Text style={styles.text}>Start a round</Text>
-        <SearchBar/>
-        <PlayCard course={courses[0]} onPress={() => navigation.navigate('HoleScreen', { course: courses[0] })}/>
-        <MapView style={styles.map}/>
-      </View>
+      <Text>Loading {userInfo.name}</Text>
     )
   }
   else{
     return(
-      <Text>Loading</Text>
+      <View style={styles.container}>
+      <Text style={styles.text}>Start a round</Text>
+      <SearchBar/>
+      {/* <FlatList
+          data={favCourses}
+          keyExtractor={(item) => item.name.toString()}
+          renderItem={({ item }) => (
+            <PlayCard course={item} onPress={() => navigation.navigate('HoleScreen', { course: item })}/>
+          )}
+        /> */}
+      <PlayCard course={favCourse} onPress={() => navigation.navigate('HoleScreen', { course: favCourse })}/> 
+      {/* <PlayCard course={courses[1]} onPress={() => navigation.navigate('HoleScreen', { course: courses[1] })}/>  */}
+      <MapView style={styles.map}/>
+    </View>
     )
   }
 

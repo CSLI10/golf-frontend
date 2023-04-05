@@ -4,7 +4,7 @@ import { VStack, Center, Skeleton, ScrollView } from 'native-base';
 
 const HomeScreen = ( { navigation } ) => (
   <View style={styles.container}>
-    <Text style={styles.text}>Feed</Text>
+    <Text style={styles.text}>Feed</Text> 
     <ScrollView>
     <VStack space={4} > 
       <Center w="400">

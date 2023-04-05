@@ -5,7 +5,7 @@ const SignupForm = ({ visible, onClose }) => {
   const [nameValue, setNameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
-
+ 
   const handleSubmit = () => {
     onSubmit(inputValue);
     setInputValue('');

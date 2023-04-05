@@ -2,7 +2,8 @@ import React from 'react';
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const PlayCard = ({ course, onPress, navigation }) => {
+const PlayCard = ({ onPress, navigation, course }) => {
+  // const {course} = route.params
   return (
     <View style={styles.cardContainer} onPress={onPress}>
         <View style={styles.row}>
@@ -18,7 +19,7 @@ const PlayCard = ({ course, onPress, navigation }) => {
             </TouchableOpacity>
         </View>
 
-    </View> 
+    </View>  
   );
 };
 

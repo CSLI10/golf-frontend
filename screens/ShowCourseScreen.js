@@ -5,7 +5,7 @@ import axios from 'axios';
 const ShowCourseScreen = ({ navigation, route }) => {
   const [course, setCourse] = useState(null);
   const {id}  = route.params;
-  // const {course}  = route.params;
+  // const {course}  = route.params; 
 
   useEffect(() => {
     axios

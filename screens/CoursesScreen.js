@@ -1,6 +1,6 @@
 import React, { useState ,useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, Button } from 'react-native';
-// import courses from "../assets/list_courses.json";
+// import courses from "../assets/list_courses.json"; 
 import CourseSquare from "../components/CourseSquare"
 import axios from "axios";
 
