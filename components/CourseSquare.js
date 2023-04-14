@@ -9,22 +9,9 @@ const CourseSquare = ({ name, location, rating, onPress }) => {
       <Text style={styles.body}>{location}</Text>
       <Text style={styles.body}>Rating:  {rating}</Text>
     </TouchableOpacity>
-//     <Box border="1" borderRadius="md">
-//     <VStack space="4" divider={<Divider />}> 
-//       <Box px="4" pt="4">
-//         {name}
-//       </Box> 
-//       <Box px="4">
-//         {location}  
-//       </Box>
-//       <Box px="4" pb="4"> 
-//         {rating} 
-//       </Box>
-//     </VStack> 
-//   </Box>
   );
 };
-
+ 
 const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: 'white',

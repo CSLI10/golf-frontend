@@ -1,13 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, HStack } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { AuthContext } from '../context/AuthContext';
 
 const MeScreen = ({ navigation, route }) => {
 
-  const {logout} = useContext(AuthContext)
+  const {logout, getUser, userInfo} = useContext(AuthContext)
+
+  useEffect(() => {
+    getUser(userInfo._id);
+  }, []);
 
   // const logOut = async () => {
   //   try {
@@ -32,7 +36,7 @@ const MeScreen = ({ navigation, route }) => {
       <TouchableOpacity style={styles.button}> 
          <Text style={styles.settings}><Icon style={styles.icon} name="create" size={20}/> Edit Profile</Text>  
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('StatsScreen')}>
          <Text style={styles.settings}><Icon style={styles.icon} name="trending-up" size={20}/> Stats</Text>  
       </TouchableOpacity>
       <TouchableOpacity style={styles.button}>
@@ -44,7 +48,7 @@ const MeScreen = ({ navigation, route }) => {
     </View>
   );
 }
-
+ 
  
 const styles = StyleSheet.create({ 
   container: {

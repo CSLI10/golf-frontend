@@ -21,9 +21,26 @@ const PlayScreen = ({ navigation }) => {
   const getFavourites = () => {
     // let courses = [];
     // console.log(courses)
+    // let favourites = [];
+    // for(let i = 0; i < userInfo.favourite_courses.length; i++){
+    //     axios
+    //     .get(`https://golf-backend-app.vercel.app/api/courses/${userInfo.favourite_courses[i]}`)
+    //     .then((response) => {
+    //       console.log(response.data);
+    //       // await setFavCourses(favCourses.push(response.data));  
+    //       favourites.push(response.data) 
+    //       // setFavCourse(response.data);
+    //       // setIsLoading(false);
+    //     })
+    //     .catch((err) => {
+    //       console.error(err);
+    //     });
+    //     setFavCourse(favourites);
+    //     setIsLoading(false);
+    // }
     // console.log(courses.length) 
         axios
-        .get(`https://golf-backend-app.vercel.app/api/courses/${userInfo.favourite_courses[0]}`)
+        .get(`https://golf-backend-app.vercel.app/api/courses/${userInfo.favourite_courses[1]}`)
         .then((response) => {
           console.log(response.data);
           // await setFavCourses(favCourses.push(response.data));  
@@ -64,14 +81,14 @@ const PlayScreen = ({ navigation }) => {
       <Text style={styles.text}>Start a round</Text>
       <SearchBar/>
       {/* <FlatList
-          data={favCourses}
+          data={favCourse}
           keyExtractor={(item) => item.name.toString()}
           renderItem={({ item }) => (
             <PlayCard course={item} onPress={() => navigation.navigate('HoleScreen', { course: item })}/>
           )}
         /> */}
       <PlayCard course={favCourse} onPress={() => navigation.navigate('HoleScreen', { course: favCourse })}/> 
-      {/* <PlayCard course={courses[1]} onPress={() => navigation.navigate('HoleScreen', { course: courses[1] })}/>  */}
+      {/* <PlayCard course={favCourse[1]} onPress={() => navigation.navigate('HoleScreen', { course: favCourse[1] })}/>  */}
       <MapView style={styles.map}/>
     </View>
     )

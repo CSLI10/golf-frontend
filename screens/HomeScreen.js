@@ -24,7 +24,7 @@ const HomeScreen = ( { navigation } ) => (
       borderColor: 'coolGray.500' 
     }} _light={{
       borderColor: 'coolGray.200' 
-    }}>
+    }}> 
         <Skeleton h="20" />
         <Skeleton.Text px="2"/>
         <Skeleton px="2" my="4" rounded="md" startColor="coolGray.300"/>

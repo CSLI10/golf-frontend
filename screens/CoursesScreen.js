@@ -33,7 +33,7 @@ const CoursesScreen = ( { navigation }) => {
         </View>
       );
 }
-
+ 
 
 
 const SearchBar = ({ onSearch }) => {

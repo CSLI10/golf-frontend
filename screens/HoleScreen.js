@@ -1,23 +1,92 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import Par4Card from '../components/Par4Card';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Par3Card from '../components/Par3Card';
 import Par5Card from '../components/Par5Card';
 import { TouchableOpacity } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
 const holesForm = require('../assets/holeScore.json').holes
+import axios from 'axios';
+
 
 const HoleScreen = ({ navigation, route }) => {
   // const [course, setCourse] = useState();
+  const {userInfo, getUser} = useContext(AuthContext);
+  // const {user, setUser} = useState(null);
+//   const {rounds, setRounds} = useState([]);
   const {_id, course}  = route.params;
   const [holes, setHoles] = useState(null);
   const [currentHole, setCurrentHole] = useState(0);
   const [form, setForm] = useState(holesForm);
-
+  const [round, setRound] = useState({
+    scorecard: form,
+    total_score: 0,
+    score_to_par: 0,
+    fairways_hit: 0,
+    greens_hit: 0,
+    putts: 0,
+    date_played: null
+  }); 
 
   useEffect(() => {
-    setHoles(course.scorecard)
+    setHoles(course.scorecard);
+    getUser(userInfo._id);
   }, []);
+
+
+
+  const submitRound = () => {
+    let rounds = userInfo.played_courses;
+    let total = 0;
+    let scoreToPar = 0;
+    let fairways = 0;
+    let greens = 0;
+    let putts = 0;
+    let date = new Date();
+    for(let i = 0; i < form.length; i ++){
+        total += form[i].score;
+        if(form[i].fairway === "yes"){
+            fairways += 1;
+        }
+        if(form[i].green === "yes"){
+            greens += 1;
+        }
+        putts += form[i].putts;
+       
+    }
+    scoreToPar = total - course.par;
+    let round = {
+        scorecard: form,
+        total_score: total,
+        score_to_par: scoreToPar,
+        fairways_hit: fairways,
+        greens_hit: greens,
+        putts: putts,
+        date_played: date
+    }
+    let roundsPush = {
+        course: course._id,
+        round: round
+    }
+    console.log(roundsPush)
+    console.log(rounds)
+    rounds.push(roundsPush); 
+    axios
+    .put(`https://golf-backend-app.vercel.app/api/users/${userInfo._id}`, {
+        played_courses: rounds
+    }
+    )
+    .then((response) => {
+      console.log("round submitted");
+      console.log(response.data)
+
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+    
+  }
 
   const handleForm = (prop, i, value) => { 
     let newForm = [...form];
@@ -35,6 +104,10 @@ const HoleScreen = ({ navigation, route }) => {
   const nextHole = () => {
     if(currentHole <= 16){
         setCurrentHole(currentHole + 1);
+    }
+    else{
+        submitRound();
+        console.log("submit round")
     }
   }
 
@@ -91,20 +164,20 @@ const HoleScreen = ({ navigation, route }) => {
             <PrevButton />
             <NextButton />
           </View>
-          <CardHole scorecard={course.scorecard} i={currentHole} handleForm={handleForm}/>
+          <CardHole scorecard={course.scorecard} i={currentHole} handleForm={handleForm} nextHole={nextHole}/>
         </View>
       );
 }
 
-const CardHole = ({ scorecard, i, handleForm }) => {
+const CardHole = ({ scorecard, i, handleForm, nextHole }) => {
     if(scorecard[i].par === 4){
-        return  <Par4Card scorecard={scorecard} i={i} handleForm={handleForm}/>
+        return  <Par4Card scorecard={scorecard} i={i} handleForm={handleForm} nextHole={nextHole}/>
     }
     else if(scorecard[i].par === 3){
-        return <Par3Card scorecard={scorecard} i={i} handleForm={handleForm}/>
+        return <Par3Card scorecard={scorecard} i={i} handleForm={handleForm} nextHole={nextHole}/>
     }
     else if(scorecard[i].par === 5){
-        return <Par5Card scorecard={scorecard} i={i} handleForm={handleForm}/>
+        return <Par5Card scorecard={scorecard} i={i} handleForm={handleForm} nextHole={nextHole}/>
     }
 }
 
