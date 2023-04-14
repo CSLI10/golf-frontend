@@ -63,7 +63,7 @@ const HoleScreen = ({ navigation, route }) => {
         fairways_hit: fairways,
         greens_hit: greens,
         putts: putts,
-        date_played: date
+        date_played: date.toLocaleDateString()
     }
     let roundsPush = {
         course: course._id,

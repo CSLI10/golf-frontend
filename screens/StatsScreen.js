@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button, FlatList } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 import { VictoryBar, VictoryChart, VictoryTheme, VictoryPie } from "victory-native";
+import StatCard from '../components/StatCard';
 
 const StatsScreen = ({ navigation }) => {
   const {userInfo} = useContext(AuthContext);
@@ -16,8 +17,17 @@ const StatsScreen = ({ navigation }) => {
   ];
 
   const scoresChart = [
-    { date: userInfo.played_courses[0].round.date_played, score: userInfo.played_courses[0].round.total_score},
-    { date: userInfo.played_courses[1].round.date_played, score: userInfo.played_courses[1].round.total_score}
+    { date: userInfo.played_courses[0].round.date_played, score: userInfo.played_courses[0].round.total_score },
+    { date: userInfo.played_courses[1].round.date_played, score: userInfo.played_courses[1].round.total_score }
+  ]
+
+  const statsOptions = [
+    { stat: "Scores", icon: "chart-bar" },
+    { stat: "Score Distribution", icon: "chart-pie" },
+    { stat: "Fairways Hit", icon: "arrow-decision-outline" },
+    { stat: "Green in Regulation", icon: "chart-donut" },
+    { stat: "Putts per Hole", icon: "sort-numeric-ascending" },
+
   ]
 
 
@@ -32,7 +42,7 @@ const StatsScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Stats</Text>
-      <VictoryPie
+      {/* <VictoryPie
       width={450}
       theme={VictoryTheme.material}
       data={statsPie}
@@ -46,7 +56,15 @@ const StatsScreen = ({ navigation }) => {
           x="date"
           y="score"
         />
-      </VictoryChart>
+      </VictoryChart> */}
+      <FlatList
+            data={statsOptions}
+            numColumns={2}
+            keyExtractor={(item) => item.stat}
+            renderItem={({ item }) => (
+              <StatCard stat={item.stat} icon={item.icon} onPress={() => navigation.navigate('SingleStatScreen', { stat: item.stat })}/>
+            )}
+          />
     </View>
   );
 };

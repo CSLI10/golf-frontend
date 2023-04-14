@@ -10,6 +10,7 @@ import HoleScreen from '../screens/HoleScreen';
 import PlayCard from '../components/PlayCard';
 import LoginForm from '../components/LoginForm';
 import StatsScreen from '../screens/StatsScreen';
+import SingleStatScreen from '../screens/SingleStatScreen';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,7 @@ export default function AppStack() {
                 <Stack.Screen name="HoleScreen" component={HoleScreen} />
                 <Stack.Screen name="LoginForm" component={LoginForm} />
                 <Stack.Screen name="StatsScreen" component={StatsScreen} />
+                <Stack.Screen name="SingleStatScreen" component={SingleStatScreen} />
             </Stack.Navigator>
       );
 
