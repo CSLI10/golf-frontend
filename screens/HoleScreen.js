@@ -8,13 +8,15 @@ import { TouchableOpacity } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 const holesForm = require('../assets/holeScore.json').holes
 import axios from 'axios';
-
+import SubmitRoundForm from '../components/SubmitRoundForm';
+ 
 
 const HoleScreen = ({ navigation, route }) => {
   // const [course, setCourse] = useState();
   const {userInfo, getUser} = useContext(AuthContext);
   // const {user, setUser} = useState(null);
 //   const {rounds, setRounds} = useState([]);
+  const [submitVisible, setSubmitVisible] = useState(false);
   const {_id, course}  = route.params;
   const [holes, setHoles] = useState(null);
   const [currentHole, setCurrentHole] = useState(0);
@@ -34,26 +36,52 @@ const HoleScreen = ({ navigation, route }) => {
     getUser(userInfo._id);
   }, []);
 
+  const handleOpenSubmit = () => {
+    setSubmitVisible(true);
+};
+
+const handleCloseSubmit = () => {
+    setSubmitVisible(false);
+};
+
 
 
   const submitRound = () => {
     let rounds = userInfo.played_courses;
+    let userStats = userInfo.stats;
     let total = 0;
     let scoreToPar = 0;
     let fairways = 0;
+    let fairway_missed_left = 0;
+    let fairway_missed_right = 0;
     let greens = 0;
     let putts = 0;
+    let albatrosses = 0;
+    let eagles = 0;
+    let birdies = 0;
+    let pars = 0;
+    let bogeys = 0;
+    let double = 0;
+    let triple_plus = 0;
     let date = new Date();
+
+    for(let i = 0; i < form.length; i++) {
+      if(form[i].score - course.scorecard[i].par === -3) albatrosses += 1;
+      else if(form[i].score - course.scorecard[i].par === -2) eagles += 1;
+      else if(form[i].score - course.scorecard[i].par === -1) birdies += 1;
+      else if(form[i].score - course.scorecard[i].par === 0) pars += 1;
+      else if(form[i].score - course.scorecard[i].par === 1) bogeys += 1;
+      else if(form[i].score - course.scorecard[i].par === 2) double += 1;
+      else if(form[i].score - course.scorecard[i].par === 3) triple_plus += 1;
+    }
+
     for(let i = 0; i < form.length; i ++){
         total += form[i].score;
-        if(form[i].fairway === "yes"){
-            fairways += 1;
-        }
-        if(form[i].green === "yes"){
-            greens += 1;
-        }
+        if(form[i].fairway === "yes") fairways += 1;
+        else if(form[i].fairway === "missed_left") fairway_missed_left += 1;
+        else if(form[i].fairway === "missed_right") fairway_missed_right += 1;
+        if(form[i].green === "yes") greens += 1;
         putts += form[i].putts;
-       
     }
     scoreToPar = total - course.par;
     let round = {
@@ -69,12 +97,27 @@ const HoleScreen = ({ navigation, route }) => {
         course: course._id,
         round: round
     }
+    userStats.rounds_played += 1;
+    userStats.total_score += total;
+    userStats.fairways_hit += fairways;
+    userStats.fairway_missed_left += fairway_missed_left;
+    userStats.fairway_missed_right += fairway_missed_right;
+    userStats.greens_hit += greens;
+    userStats.putts += putts;
+    userStats.albatrosses += albatrosses;
+    userStats.eagles += eagles;
+    userStats.birdies += birdies;
+    userStats.pars += pars;
+    userStats.bogeys += bogeys;
+    userStats.double += double;
+    userStats.triple_plus += triple_plus;
     console.log(roundsPush)
     console.log(rounds)
     rounds.push(roundsPush); 
     axios
     .put(`https://golf-backend-app.vercel.app/api/users/${userInfo._id}`, {
-        played_courses: rounds
+        played_courses: rounds,
+        stats: userStats
     }
     )
     .then((response) => {
@@ -106,7 +149,8 @@ const HoleScreen = ({ navigation, route }) => {
         setCurrentHole(currentHole + 1);
     }
     else{
-        submitRound();
+        // submitRound();
+        handleOpenSubmit()
         console.log("submit round")
     }
   }
@@ -149,6 +193,31 @@ const HoleScreen = ({ navigation, route }) => {
     }
   }
 
+  const ScoreText = () => {
+    let showScore = 0;
+    for(let i = 0; i < form.length; i++){
+      if(form[i].score){
+        showScore += (form[i].score - course.scorecard[i].par);
+      }
+    }
+    // setScore(showScore); 
+    if(showScore === 0){
+      return(
+        <Text style={styles.score}> E </Text>
+      )
+    }
+    else if(showScore < 0){
+      return(
+        <Text style={styles.score}> {showScore} </Text>
+      )
+    }
+    else if(showScore > 0){
+      return(
+        <Text style={styles.score}> +{showScore} </Text>
+      )
+    }
+  }
+
 
 
 
@@ -162,22 +231,28 @@ const HoleScreen = ({ navigation, route }) => {
           </View>
           <View style={styles.rowNext}>
             <PrevButton />
+            <ScoreText />
             <NextButton />
           </View>
-          <CardHole scorecard={course.scorecard} i={currentHole} handleForm={handleForm} nextHole={nextHole}/>
+          <CardHole scorecard={course.scorecard} i={currentHole} handleForm={handleForm} nextHole={nextHole} form={form}/>
+          <SubmitRoundForm 
+            visible={submitVisible}
+            onClose={handleCloseSubmit}
+            submitRound={submitRound}
+          />
         </View>
       );
 }
 
-const CardHole = ({ scorecard, i, handleForm, nextHole }) => {
+const CardHole = ({ scorecard, i, handleForm, nextHole, form }) => {
     if(scorecard[i].par === 4){
-        return  <Par4Card scorecard={scorecard} i={i} handleForm={handleForm} nextHole={nextHole}/>
+        return  <Par4Card scorecard={scorecard} i={i} handleForm={handleForm} nextHole={nextHole} form={form}/>
     }
     else if(scorecard[i].par === 3){
-        return <Par3Card scorecard={scorecard} i={i} handleForm={handleForm} nextHole={nextHole}/>
+        return <Par3Card scorecard={scorecard} i={i} handleForm={handleForm} nextHole={nextHole} form={form}/>
     }
     else if(scorecard[i].par === 5){
-        return <Par5Card scorecard={scorecard} i={i} handleForm={handleForm} nextHole={nextHole}/>
+        return <Par5Card scorecard={scorecard} i={i} handleForm={handleForm} nextHole={nextHole} form={form}/>
     }
 }
 
@@ -213,9 +288,10 @@ const styles = StyleSheet.create({
     paddingLeft: '18%',
     paddingRight: 10
   },
-  location: {
-    fontSize: 14,
-    paddingLeft: '28%',
+  score: {
+    fontSize: 24,
+    paddingRight: 25,
+    marginTop: 5,
     color: '#4b4b4b'
   },
   description: {

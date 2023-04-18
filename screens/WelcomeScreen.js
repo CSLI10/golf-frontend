@@ -19,7 +19,7 @@ const WelcomeScreen = ({ navigation }) => {
         setLoginVisible(false);
         
     };
-
+ 
     const handleCloseSignup = () => {
         setSignupVisible(false);
     };

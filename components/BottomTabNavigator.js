@@ -6,7 +6,7 @@ import CoursesScreen from '../screens/CoursesScreen';
 import MeScreen from '../screens/MeScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ShowCourseScreen from '../screens/ShowCourseScreen'; 
-
+ 
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabNavigator() {

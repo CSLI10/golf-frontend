@@ -2,13 +2,52 @@ import React, { useState } from 'react';
 import { Text, StyleSheet, View, Button, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
  
-const Par3Card = ({ scorecard, i, handleForm, nextHole }) => {
+const Par3Card = ({ scorecard, i, handleForm, nextHole, form }) => {
   const [oneScore, setOneScore] = useState(null);
   const [fairway, setFairway] = useState(null);
   const [green, setGreen] = useState(null);
   const [putts, setPutts] = useState(null);
 
+  const getIconScore = (value) => {
+    if(value === 1) return "numeric-1-circle";
+    else if(value === 2) return "numeric-2-circle-outline";
+    else if(value === 3) return "numeric-3";
+    else if(value === 4) return "numeric-4-box-outline";
+    else if(value === 5) return "numeric-5-box";
+    else if(value === 6) return "numeric-6-box";
+    else if(value === 7) return "numeric-7-box";
+    else if(value === 8) return "numeric-8-box";
+    else if(value === 9) return "numeric-9-box";
+    else if(value === 10) return "numeric-10-box-multiple";
+  }
+
+  const getIconFairway = (value) => {
+    if(value === "missed_left") return "arrow-top-left-thick";
+    else if(value === "yes") return "check-bold";
+    else if(value === "missed_right") return "arrow-top-right-thick";
+  }
+
+  const getIconGreen = (value) => {
+    if(value === "no") return "close-circle-outline";
+    else if(value === "yes") return "check-bold";
+  }
+
+  const getIconPutts = (value) => {
+    if(value === 0) return "numeric-0-circle-outline";
+    else if(value === 1) return "numeric-1-circle-outline";
+    else if(value === 2) return "numeric-2-circle-outline";
+    else if(value === 3) return "numeric-3-circle-outline";
+    else if(value === 4) return "numeric-4-circle-outline";
+  }
+
   const ShowScores = () => { 
+    if(form[i]["score"] !== null){
+      setOneScore(getIconScore(form[i]["score"]))
+    }
+    else if(form[i]["score"] === null){
+      setOneScore(null)
+    }
+
     if(oneScore !== null){
       return(
         <TouchableOpacity style={styles.oneScore} onPress={() => {setOneScore(null); handleForm("score", i, null)}}>
@@ -62,6 +101,13 @@ const Par3Card = ({ scorecard, i, handleForm, nextHole }) => {
   }
 
   const ShowFairways = () => {
+    if(form[i]["fairway"] !== null){
+      setFairway(getIconFairway(form[i]["fairway"]));
+    }
+    else if(form[i]["fairway"] === null){
+      setFairway(null);
+    }
+
     if(fairway !== null){
       return(
         <>
@@ -98,6 +144,12 @@ const Par3Card = ({ scorecard, i, handleForm, nextHole }) => {
   }
 
   const ShowGreens = () => {
+    if(form[i]["green"] !== null){
+      setGreen(getIconGreen(form[i]["green"]))
+    }
+    else if(form[i]["green"] === null){
+      setGreen(null)
+    }
     if(green !== null){
       return (
         <>
@@ -126,6 +178,12 @@ const Par3Card = ({ scorecard, i, handleForm, nextHole }) => {
   }
 
   const ShowPutts = () => {
+    if(form[i]["putts"] !== null){
+      setPutts(getIconPutts(form[i]["putts"]));
+    }
+    else if(form[i]["putts"] === null){
+      setPutts(null);
+    }
     if(putts !== null){
       return(
         <>

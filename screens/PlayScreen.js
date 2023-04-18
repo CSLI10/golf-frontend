@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, FlatList, ActivityIndicator } from 'react-native';
 import MapView from 'react-native-maps';
 import axios from 'axios';
 import PlayCard from '../components/PlayCard';
@@ -62,7 +62,7 @@ const PlayScreen = ({ navigation }) => {
     //     setCourses(response.data);
     //     // console.log(courses[0]) 
     //     console.log("second" + id)
-    //     setIsLoading(false)
+    //     setIsLoading(false) 
     //   })  
     //   .catch((err) => {
     //     console.error(err); 
@@ -72,7 +72,9 @@ const PlayScreen = ({ navigation }) => {
  
   if(isLoading){
     return(
-      <Text>Loading {userInfo.name}</Text>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator color={'black'} size={50} />
+      </View>
     )
   }
   else{

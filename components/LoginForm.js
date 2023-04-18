@@ -11,39 +11,6 @@ const LoginForm = ({ navigation, visible, onClose }) => {
 
   const [emailValue, setEmailValue] = useState(null);
   const [passwordValue, setPasswordValue] = useState(null);
-//   const [token, setToken] = useState(null)
-//   const [form, setForm] = useState({
-//     email: "",
-//     password: "",
-//   });
-
-//   const handleSubmit = () => {
-//     console.log("Email: ", emailValue);
-//     console.log("Password: ", passwordValue);
-
-//     axios
-//       .post("https://golf-backend-app.vercel.app/api/users/login", { 
-//         email: emailValue,
-//         password: passwordValue,
-//       })
-//       .then(async (response) => {
-//         console.log(response.data);
-//         const token = response.data.token
-//         const _id = response.data._id
-//         await AsyncStorage.setItem('token', token);
-//         await AsyncStorage.setItem('_id', _id);
-//         console.log('Token stored:', token);
-//         console.log('ID stored:', _id )
-//         // onClose();
-//         setLoginVisible(false);
-//         navigation.navigate('BottomTabNavigator')
-//       })
-//       .catch((err) => {
-//         console.error(err); 
-//         console.log(err.response.data);
-//         setErrorMessage("Invalid email or password"); 
-//       });
-//   };
 
   return (
     <Modal visible={visible} animationType="slide">

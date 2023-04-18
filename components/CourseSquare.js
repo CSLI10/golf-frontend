@@ -10,7 +10,7 @@ const CourseSquare = ({ name, location, rating, onPress }) => {
       <Text style={styles.body}>Rating:  {rating}</Text>
     </TouchableOpacity>
   );
-};
+}; 
  
 const styles = StyleSheet.create({
   cardContainer: {

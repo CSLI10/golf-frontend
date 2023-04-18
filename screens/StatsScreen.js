@@ -30,33 +30,9 @@ const StatsScreen = ({ navigation }) => {
 
   ]
 
-
-  const getStats = () => {
-    // let userStats = null;
-    // let userRounds = null;
-    // getUser(userInfo._id);
-    // setStats(userInfo.stats);
-    // setRounds(userInfo.played_courses)
-  }
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Stats</Text>
-      {/* <VictoryPie
-      width={450}
-      theme={VictoryTheme.material}
-      data={statsPie}
-      />
-      <VictoryChart
-        theme={VictoryTheme.material}
-        domainPadding={{ x: 50 }}
-      >
-        <VictoryBar
-          data={scoresChart}
-          x="date"
-          y="score"
-        />
-      </VictoryChart> */}
       <FlatList
             data={statsOptions}
             numColumns={2}
