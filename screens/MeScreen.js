@@ -48,7 +48,7 @@ const MeScreen = ({ navigation, route }) => {
     </View>
   );
 }
- 
+  
  
 const styles = StyleSheet.create({ 
   container: {

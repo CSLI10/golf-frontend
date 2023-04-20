@@ -15,7 +15,7 @@ const StatCard = ({ stat, icon, onPress }) => {
 const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: 'white',
-    width: 175,
+    width: 180,
     padding: 10,
     borderRadius: 5,
     shadowColor: '#000',

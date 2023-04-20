@@ -2,13 +2,13 @@ import React, { useState, useContext } from 'react';
 import { View, Text, Modal, TextInput, StyleSheet, Button } from 'react-native';
 import RoundReview from './RoundReview';
 
-const SubmitRoundForm = ({ navigation, visible, onClose, submitRound }) => {
+const SubmitRoundForm = ({ navigation, visible, onClose, submitRound, form, scorecard }) => {
 
   return (
     <Modal visible={visible} animationType="slide">
       <View style={styles.container}>
         <Text style={styles.title}>Submit Round</Text>
-        <RoundReview />
+        <RoundReview form={form} scorecard={scorecard}/>
         <View style={styles.buttons}>
           <Button title="Cancel" onPress={onClose} color="red" />
           <Button title="Submit" onPress={() => {submitRound()}} />

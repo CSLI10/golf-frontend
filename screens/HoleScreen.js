@@ -13,11 +13,11 @@ import SubmitRoundForm from '../components/SubmitRoundForm';
 
 const HoleScreen = ({ navigation, route }) => {
   // const [course, setCourse] = useState();
-  const {userInfo, getUser} = useContext(AuthContext);
+  const { userInfo, getUser } = useContext(AuthContext);
   // const {user, setUser} = useState(null);
-//   const {rounds, setRounds} = useState([]);
+  //   const {rounds, setRounds} = useState([]);
   const [submitVisible, setSubmitVisible] = useState(false);
-  const {_id, course}  = route.params;
+  const { _id, course } = route.params;
   const [holes, setHoles] = useState(null);
   const [currentHole, setCurrentHole] = useState(0);
   const [form, setForm] = useState(holesForm);
@@ -28,8 +28,8 @@ const HoleScreen = ({ navigation, route }) => {
     fairways_hit: 0,
     greens_hit: 0,
     putts: 0,
-    date_played: null
-  }); 
+    date_played: null,
+  });
 
   useEffect(() => {
     setHoles(course.scorecard);
@@ -38,13 +38,11 @@ const HoleScreen = ({ navigation, route }) => {
 
   const handleOpenSubmit = () => {
     setSubmitVisible(true);
-};
+  };
 
-const handleCloseSubmit = () => {
+  const handleCloseSubmit = () => {
     setSubmitVisible(false);
-};
-
-
+  };
 
   const submitRound = () => {
     let rounds = userInfo.played_courses;
@@ -65,38 +63,38 @@ const handleCloseSubmit = () => {
     let triple_plus = 0;
     let date = new Date();
 
-    for(let i = 0; i < form.length; i++) {
-      if(form[i].score - course.scorecard[i].par === -3) albatrosses += 1;
-      else if(form[i].score - course.scorecard[i].par === -2) eagles += 1;
-      else if(form[i].score - course.scorecard[i].par === -1) birdies += 1;
-      else if(form[i].score - course.scorecard[i].par === 0) pars += 1;
-      else if(form[i].score - course.scorecard[i].par === 1) bogeys += 1;
-      else if(form[i].score - course.scorecard[i].par === 2) double += 1;
-      else if(form[i].score - course.scorecard[i].par === 3) triple_plus += 1;
+    for (let i = 0; i < form.length; i++) {
+      if (form[i].score - course.scorecard[i].par === -3) albatrosses += 1;
+      else if (form[i].score - course.scorecard[i].par === -2) eagles += 1;
+      else if (form[i].score - course.scorecard[i].par === -1) birdies += 1;
+      else if (form[i].score - course.scorecard[i].par === 0) pars += 1;
+      else if (form[i].score - course.scorecard[i].par === 1) bogeys += 1;
+      else if (form[i].score - course.scorecard[i].par === 2) double += 1;
+      else if (form[i].score - course.scorecard[i].par === 3) triple_plus += 1;
     }
 
-    for(let i = 0; i < form.length; i ++){
-        total += form[i].score;
-        if(form[i].fairway === "yes") fairways += 1;
-        else if(form[i].fairway === "missed_left") fairway_missed_left += 1;
-        else if(form[i].fairway === "missed_right") fairway_missed_right += 1;
-        if(form[i].green === "yes") greens += 1;
-        putts += form[i].putts;
+    for (let i = 0; i < form.length; i++) {
+      total += form[i].score;
+      if (form[i].fairway === "yes") fairways += 1;
+      else if (form[i].fairway === "missed_left") fairway_missed_left += 1;
+      else if (form[i].fairway === "missed_right") fairway_missed_right += 1;
+      if (form[i].green === "yes") greens += 1;
+      putts += form[i].putts;
     }
     scoreToPar = total - course.par;
     let round = {
-        scorecard: form,
-        total_score: total,
-        score_to_par: scoreToPar,
-        fairways_hit: fairways,
-        greens_hit: greens,
-        putts: putts,
-        date_played: date.toLocaleDateString()
-    }
+      scorecard: form,
+      total_score: total,
+      score_to_par: scoreToPar,
+      fairways_hit: fairways,
+      greens_hit: greens,
+      putts: putts,
+      date_played: date.toLocaleDateString(),
+    };
     let roundsPush = {
-        course: course._id,
-        round: round
-    }
+      course: course._id,
+      round: round,
+    };
     userStats.rounds_played += 1;
     userStats.total_score += total;
     userStats.fairways_hit += fairways;
@@ -111,150 +109,183 @@ const handleCloseSubmit = () => {
     userStats.bogeys += bogeys;
     userStats.double += double;
     userStats.triple_plus += triple_plus;
-    console.log(roundsPush)
-    console.log(rounds)
-    rounds.push(roundsPush); 
+    console.log(roundsPush);
+    console.log(rounds);
+    rounds.push(roundsPush);
     axios
-    .put(`https://golf-backend-app.vercel.app/api/users/${userInfo._id}`, {
+      .put(`https://golf-backend-app.vercel.app/api/users/${userInfo._id}`, {
         played_courses: rounds,
-        stats: userStats
-    }
-    )
-    .then((response) => {
-      console.log("round submitted");
-      console.log(response.data)
+        stats: userStats,
+      })
+      .then((response) => {
+        console.log("round submitted");
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-    
-  }
-
-  const handleForm = (prop, i, value) => { 
+  const handleForm = (prop, i, value) => {
     let newForm = [...form];
     newForm[i][prop] = value;
     setForm(newForm);
     console.log(form);
-  }
+  };
 
   const prevHole = () => {
-    if(currentHole >= 1){
-        setCurrentHole(currentHole - 1);
-    } 
-  }
+    if (currentHole >= 1) {
+      setCurrentHole(currentHole - 1);
+    }
+  };
 
   const nextHole = () => {
-    if(currentHole <= 16){
-        setCurrentHole(currentHole + 1);
+    if (currentHole <= 16) {
+      setCurrentHole(currentHole + 1);
+    } else {
+      // submitRound();
+      handleOpenSubmit();
+      console.log("submit round");
     }
-    else{
-        // submitRound();
-        handleOpenSubmit()
-        console.log("submit round")
-    }
-  }
+  };
 
   const PrevButton = () => {
-    if(currentHole > 0){
-        return (
-          <TouchableOpacity style={styles.row} onPress={prevHole}>
-             <MaterialCommunityIcons name="arrow-left-circle-outline" size={35} color="black" />
-             <Text style={styles.description}>Previous</Text>
-          </TouchableOpacity>
-        )
+    if (currentHole > 0) {
+      return (
+        <TouchableOpacity style={styles.row} onPress={prevHole}>
+          <MaterialCommunityIcons
+            name="arrow-left-circle-outline"
+            size={35}
+            color="black"
+          />
+          <Text style={styles.description}>Previous</Text>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <View style={styles.row}>
+          <MaterialCommunityIcons
+            name="arrow-left-circle-outline"
+            size={35}
+            color="grey"
+          />
+          <Text style={styles.inactive}>Previous</Text>
+        </View>
+      );
     }
-    else {
-        return (
-            <View style={styles.row}>
-               <MaterialCommunityIcons name="arrow-left-circle-outline" size={35} color="grey" />
-               <Text style={styles.inactive}>Previous</Text>
-            </View>
-          )
-    }
-  }
+  };
 
   const NextButton = () => {
-    if(currentHole < 17){
-        return (
-          <TouchableOpacity style={styles.row} onPress={nextHole}>
-             <Text style={styles.description}>Next</Text>
-             <MaterialCommunityIcons name="arrow-right-circle-outline" size={35} color="black" />
-          </TouchableOpacity>
-        )
-    }
-    else {
-        return (
-            <View style={styles.row}>
-               <Text style={styles.inactive}>Next</Text>
-               <MaterialCommunityIcons name="arrow-right-circle-outline" size={35} color="grey" />
-            </View>
-          )
-    }
-  }
-
-  const ScoreText = () => {
-    let showScore = 0;
-    for(let i = 0; i < form.length; i++){
-      if(form[i].score){
-        showScore += (form[i].score - course.scorecard[i].par);
-      }
-    }
-    // setScore(showScore); 
-    if(showScore === 0){
-      return(
-        <Text style={styles.score}> E </Text>
-      )
-    }
-    else if(showScore < 0){
-      return(
-        <Text style={styles.score}> {showScore} </Text>
-      )
-    }
-    else if(showScore > 0){
-      return(
-        <Text style={styles.score}> +{showScore} </Text>
-      )
-    }
-  }
-
-
-
-
-
+    if (currentHole < 17) {
       return (
-        <View style={styles.card}>
-          <Image style={styles.stretch} src={course.image_path[0]}/>
-          <View style={styles.rowName}>
-            <Text style={styles.name}>{course.name}</Text> 
-            <MaterialCommunityIcons name="golf" size={40} color="black" /> 
-          </View>
-          <View style={styles.rowNext}>
-            <PrevButton />
-            <ScoreText />
-            <NextButton />
-          </View>
-          <CardHole scorecard={course.scorecard} i={currentHole} handleForm={handleForm} nextHole={nextHole} form={form}/>
-          <SubmitRoundForm 
-            visible={submitVisible}
-            onClose={handleCloseSubmit}
-            submitRound={submitRound}
+        <TouchableOpacity style={styles.row} onPress={nextHole}>
+          <Text style={styles.description}>Next</Text>
+          <MaterialCommunityIcons
+            name="arrow-right-circle-outline"
+            size={35}
+            color="black"
+          />
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <View style={styles.row}>
+          <Text style={styles.inactive}>Next</Text>
+          <MaterialCommunityIcons
+            name="arrow-right-circle-outline"
+            size={35}
+            color="grey"
           />
         </View>
       );
-}
+    }
+  };
+
+  const ScoreText = () => {
+    let showScore = 0;
+    for (let i = 0; i < form.length; i++) {
+      if (form[i].score) {
+        showScore += form[i].score - course.scorecard[i].par;
+      }
+    }
+    // setScore(showScore);
+    if (showScore === 0) {
+      return <Text style={styles.score}> E </Text>;
+    } else if (showScore < 0) {
+      return <Text style={styles.score}> {showScore} </Text>;
+    } else if (showScore > 0) {
+      return <Text style={styles.score}> +{showScore} </Text>;
+    }
+  };
+
+  return (
+    <View style={styles.card}>
+      <Image
+        style={styles.stretch}
+        source={{
+          uri: `${course.image_path[0]}`,
+        }}
+      />
+      <View style={styles.rowName}>
+        <Text style={styles.name}>{course.name}</Text>
+        <MaterialCommunityIcons name="golf" size={40} color="black" />
+      </View>
+      <View style={styles.rowNext}>
+        <PrevButton />
+        <ScoreText />
+        <NextButton />
+      </View>
+      <CardHole
+        scorecard={course.scorecard}
+        i={currentHole}
+        handleForm={handleForm}
+        nextHole={nextHole}
+        form={form}
+      />
+      <SubmitRoundForm
+        form={form}
+        scorecard={course.scorecard}
+        visible={submitVisible}
+        onClose={handleCloseSubmit}
+        submitRound={submitRound}
+      />
+    </View>
+  );
+};
 
 const CardHole = ({ scorecard, i, handleForm, nextHole, form }) => {
-    if(scorecard[i].par === 4){
-        return  <Par4Card scorecard={scorecard} i={i} handleForm={handleForm} nextHole={nextHole} form={form}/>
-    }
-    else if(scorecard[i].par === 3){
-        return <Par3Card scorecard={scorecard} i={i} handleForm={handleForm} nextHole={nextHole} form={form}/>
-    }
-    else if(scorecard[i].par === 5){
-        return <Par5Card scorecard={scorecard} i={i} handleForm={handleForm} nextHole={nextHole} form={form}/>
-    }
-}
+  if (scorecard[i].par === 4) {
+    return (
+      <Par4Card
+        scorecard={scorecard}
+        i={i}
+        handleForm={handleForm}
+        nextHole={nextHole}
+        form={form}
+      />
+    );
+  } else if (scorecard[i].par === 3) {
+    return (
+      <Par3Card
+        scorecard={scorecard}
+        i={i}
+        handleForm={handleForm}
+        nextHole={nextHole}
+        form={form}
+      />
+    );
+  } else if (scorecard[i].par === 5) {
+    return (
+      <Par5Card
+        scorecard={scorecard}
+        i={i}
+        handleForm={handleForm}
+        nextHole={nextHole}
+        form={form}
+      />
+    );
+  }
+};
 
 
 

@@ -43,7 +43,7 @@ const HomeScreen = ( { navigation } ) => (
       </VStack>
     </Center>
     </VStack>
-    </ScrollView>
+    </ScrollView> 
 
   </View>
 );

@@ -1,22 +1,30 @@
 import React from 'react';
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { VStack, Box, Divider } from 'native-base';
 
-const CourseSquare = ({ name, location, rating, onPress }) => {
+const CourseSquare = ({ name, location, rating, image_path, onPress }) => {
   return (
     <TouchableOpacity style={styles.cardContainer} onPress={onPress}>
+      <Image 
+        style={styles.stretch} 
+        source={{
+          uri: `${image_path}`,
+        }}
+      />
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.body}>{location}</Text>
-      <Text style={styles.body}>Rating:  {rating}</Text>
+
     </TouchableOpacity>
   );
-}; 
+};
  
 const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: 'white',
-    padding: 20,
+    padding: 10,
     borderRadius: 10,
+    width: 200,
+    height: 200,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -26,9 +34,18 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     marginVertical: 5,
+    marginHorizontal: 3
+
+  },
+  stretch: {
+    width: '100%',
+    height: 100,
+    resizeMode: 'stretch',
+    marginBottom: 5,
+    borderRadius: 3
   },
   name: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,

@@ -21,18 +21,19 @@ const CoursesScreen = ( { navigation }) => {
 
         return (
         <View style={styles.container}> 
-          <Text style={styles.text}>Courses in Ireland</Text> 
+          <Text style={styles.text}>Courses in Ireland</Text>
           <SearchBar />
           <FlatList
             data={courses}
+            numColumns={2}
             keyExtractor={(item) => item.name.toString()}
             renderItem={({ item }) => (
-              <CourseSquare name={item.name} location={item.location} rating={item.rating} onPress={() => navigation.navigate('ShowCourseScreen', { id: item._id })} />
+              <CourseSquare name={item.name} location={item.location} rating={item.rating} image_path={item.image_path[0]} onPress={() => navigation.navigate('ShowCourseScreen', { id: item._id })} />
             )}
           />
         </View>
       );
-}
+} 
  
 
 

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, Image } from 'react-native';
+import { View, Text, StyleSheet, Button, Image, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 
 const ShowCourseScreen = ({ navigation, route }) => {
   const [course, setCourse] = useState(null);
   const {id}  = route.params;
-  // const {course}  = route.params; 
+  // const {course}  = route.params;
 
   useEffect(() => {
     axios
@@ -24,7 +24,12 @@ const ShowCourseScreen = ({ navigation, route }) => {
   if(course != null){
     return (
       <View style={styles.card}> 
-        <Image style={styles.stretch} src={course.image_path[1]}/>
+        <Image 
+        style={styles.stretch} 
+        source={{
+          uri: `${course.image_path[1]}`,
+        }}
+        />
         <Text style={styles.name}>{course.name}</Text> 
         <Text style={styles.location}>{course.location}</Text>
         <Text style={styles.description} numberOfLines={0}>{course.description}</Text>
@@ -37,7 +42,9 @@ const ShowCourseScreen = ({ navigation, route }) => {
   }
   else {
     return (
-      <Text>Loading</Text>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator color={'black'} size={80} />
+      </View>
     )
   }
 

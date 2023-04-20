@@ -41,7 +41,7 @@ const WelcomeScreen = ({ navigation }) => {
       />
     </View>
   );
-};
+}; 
 
 const styles = StyleSheet.create({
   container: {

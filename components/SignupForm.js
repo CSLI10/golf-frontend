@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, TextInput, StyleSheet, Button } from 'react-native';
-
+ 
 const SignupForm = ({ visible, onClose }) => {
   const [nameValue, setNameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');

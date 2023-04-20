@@ -10,7 +10,7 @@ const SingleStatScreen = ({ navigation, route }) => {
       <Text style={styles.title}>{stat}</Text>
       <ShowStat stat={stat}/>
     </View>
-  );
+  ); 
 };
 
 const styles = StyleSheet.create({

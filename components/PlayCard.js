@@ -6,20 +6,19 @@ const PlayCard = ({ onPress, navigation, course }) => {
   // const {course} = route.params
   return (
     <View style={styles.cardContainer} onPress={onPress}>
-        <View style={styles.row}>
-            <TouchableOpacity>
-                <MaterialCommunityIcons name="star" size={40} color="black" />
-            </TouchableOpacity>
-            <View>
-              <Text style={styles.name}>{course.name}</Text>
-              <Text style={styles.body}>{course.location}</Text>
-            </View>
-            <TouchableOpacity onPress={onPress}>
-                <MaterialCommunityIcons name="golf-tee" size={40} color="black" />
-            </TouchableOpacity>
+      <View style={styles.row}>
+        <TouchableOpacity>
+          <MaterialCommunityIcons name="star" size={40} color="black" />
+        </TouchableOpacity>
+        <View>
+          <Text style={styles.name}>{course.name}</Text>
+          <Text style={styles.body}>{course.location}</Text>
         </View>
-
-    </View>  
+        <TouchableOpacity onPress={onPress}>
+          <MaterialCommunityIcons name="golf-tee" size={40} color="black" />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
 

@@ -7,7 +7,7 @@ import StatCard from '../components/StatCard';
 const StatsScreen = ({ navigation }) => {
   const {userInfo} = useContext(AuthContext);
   // const {stats, setStats} = useState(null);
-  // const {rounds, setRounds} = useState(null)
+  // const {rounds, setRounds} = useState(null) 
   const statsPie = [
     { x: "Eagle +", y: userInfo.stats.eagles+userInfo.stats.albatrosses },
     { x: "Bogey", y: userInfo.stats.bogeys },
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20
+    paddingTop: 20
   },
   title: {
     fontSize: 24,
