@@ -14,7 +14,7 @@ const RoundReview = ({ form, scorecard }) => {
         </View>
         <ScrollView horizontal>
           <View>
-            <FlatList
+            <FlatList 
               horizontal={true}
               scrollEnabled={false}
               data={form}
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#F0f0f0",
     borderWidth: 1,
+    fontWeight: 'bold',
     borderColor: "#ccc",
     padding: 5,
   },

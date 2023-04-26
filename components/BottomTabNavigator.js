@@ -12,14 +12,14 @@ const Tab = createBottomTabNavigator();
 export default function BottomTabNavigator() {
   return (
     <Tab.Navigator>
-        {/* <Tab.Screen 
+        <Tab.Screen 
          name="Home"   
          component={HomeScreen}          
          options={{
             tabBarIcon: ({ focused, color, size }) => (
               <Icon name="ios-home" color={color} size={size} />
             ),
-          }}/> */}
+          }}/>
         <Tab.Screen 
          name="Play" 
          component={PlayScreen} 
@@ -46,4 +46,4 @@ export default function BottomTabNavigator() {
         }}/>
     </Tab.Navigator>
   );
-} 
+}

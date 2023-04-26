@@ -29,7 +29,7 @@ function AppNav() {
     </NativeBaseProvider>
   );
 }
-
+ 
 const newColorTheme = {
     brand: {
       900: '#5B8DF6',

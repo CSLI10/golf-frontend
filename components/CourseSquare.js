@@ -16,15 +16,15 @@ const CourseSquare = ({ name, location, rating, image_path, onPress }) => {
 
     </TouchableOpacity>
   );
-};
+}; 
  
 const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: 'white',
-    padding: 10,
+    padding: 5,
     borderRadius: 10,
     width: 200,
-    height: 200,
+    height: 190,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

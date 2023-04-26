@@ -39,7 +39,7 @@ const Par5Card = ({ scorecard, i, handleForm, nextHole, form }) => {
     else if (value === 3) return "numeric-3-circle-outline";
     else if (value === 4) return "numeric-4-circle-outline";
   };
-
+ 
   const ShowScores = () => {
     if (form[i]["score"] !== null) {
       setOneScore(getIconScore(form[i]["score"]));

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, View, Button, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
- 
+
 const Par4Card = ({ scorecard, i, handleForm, nextHole, form }) => {
   const [oneScore, setOneScore] = useState(null);
   const [fairway, setFairway] = useState(null);

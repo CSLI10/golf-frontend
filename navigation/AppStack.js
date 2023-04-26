@@ -33,4 +33,4 @@ export default function AppStack() {
       <Stack.Screen name="SingleStatScreen" component={SingleStatScreen} />
     </Stack.Navigator>
   );
-} 
+}

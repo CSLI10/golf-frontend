@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, FlatList, ActivityIndicator, TouchableOpacity, ImageBackground } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import PlayCard from '../components/PlayCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const PlayScreen = ({ navigation }) => {
   const [courses, setCourses] = useState(null);
@@ -43,6 +44,11 @@ const PlayScreen = ({ navigation }) => {
     { id: 4, title: 'Ballybunion Golf Club', description: 'Ballybunion, Ireland', coordinate: { latitude: 52.495137, longitude: -9.676400 } },
   ];
 
+  // const image = {uri: "https://golfersglobe.com/media/3220/ballybunion-7th-am.jpg"}
+  // const image = {uri: "https://www.hartough.com/uploads/Thumbnails/10th.Augusta.jpg"}
+  const image = {uri: "https://www.hartough.com/uploads/Thumbnails/11th-hole-white-dogwood-augusta-national-golf-club-1996.jpg"}
+  
+
   // const id = AsyncStorage.getItem('_id');  
 
   const getFavourites = () => {
@@ -68,7 +74,7 @@ const PlayScreen = ({ navigation }) => {
     // }
     // console.log(courses.length) 
         axios
-        .get(`https://golf-backend-app.vercel.app/api/courses/${userInfo.favourite_courses[1]}`)
+        .get(`https://golf-backend-app.vercel.app/api/courses/${userInfo.favourite_courses[0]}`)
         .then((response) => {
           // console.log(response.data);
           // await setFavCourses(favCourses.push(response.data));  
@@ -120,8 +126,19 @@ const PlayScreen = ({ navigation }) => {
   else{
     return(
       <View style={styles.container}>
-      <Text style={styles.text}>Start a round</Text>
+        {/* <View style={styles.card}>
+          <Text style={styles.text}>Start a round</Text>
+          <SearchBar/>
+        </View> */}
+            <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+            <MaterialCommunityIcons name="golf" size={84} color="white" />
+              <Text style={styles.start}>Start a Round</Text>
+
       <SearchBar/>
+      {/* <PlayCard course={favCourse} onPress={() => navigation.navigate('HoleScreen', { course: favCourse })}/>  */}
+    </ImageBackground>
+
+
       {/* <FlatList
           data={favCourse}
           keyExtractor={(item) => item.name.toString()}
@@ -129,9 +146,9 @@ const PlayScreen = ({ navigation }) => {
             <PlayCard course={item} onPress={() => navigation.navigate('HoleScreen', { course: item })}/>
           )}
         /> */}
-      <PlayCard course={favCourse} onPress={() => navigation.navigate('HoleScreen', { course: favCourse })}/> 
+      {/* <PlayCard course={favCourse} onPress={() => navigation.navigate('HoleScreen', { course: favCourse })}/>  */}
       {/* <PlayCard course={favCourse[1]} onPress={() => navigation.navigate('HoleScreen', { course: favCourse[1] })}/>  */}
-      <MapView 
+      {/* <MapView 
       style={styles.map}
       >
       {markers.map(marker => (
@@ -142,7 +159,7 @@ const PlayScreen = ({ navigation }) => {
           coordinate={marker.coordinate}
         />
       ))}
-      </MapView>
+      </MapView> */}
     </View>
     )
   }
@@ -161,37 +178,85 @@ const SearchBar = ({ onSearch }) => {
           style={styles.input}
           value={search}
           onChangeText={(text) => setSearch(text)}
-          placeholder='Where are you playing??'
+          placeholder='Where are you playing today?'
         />
-        <Button title='Search' onPress={() => onSearch(search)} />
+        <Button color='white' title='Search' onPress={() => onSearch(search)} />
+        {/* <TouchableOpacity>
+          <Text style={styles.search}>Search <MaterialCommunityIcons name="send" size={14} color="white" /></Text>
+        </TouchableOpacity> */}
       </View> 
     );
   };
 
 const styles = StyleSheet.create({
   container: { 
-    flex: 1,
+    // flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'grey'
+  },
+  card: {
+    // backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    padding: 10,
+    height: 70,
+    borderRadius: 0,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginVertical: 1,
+  },
+  image: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    borderRadius: 0,
+    marginVertical: 1,
   },
   text: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 20
+    marginTop: 20,
+    color: 'white'
+  },
+  start: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: 20,
+    color: 'white'
+  },
+  searchB: {
+    color: 'white'
+  },
+  search: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginTop: 0,
+    color: 'white',
+    marginLeft: 10
   },
   container2: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 10,
-  },
+  }, 
   input: {
     flex: 1,
     padding: 10,
     borderWidth: 1,
     borderColor: 'lightgray',
-    borderRadius: 5,
+    borderRadius: 40,
     backgroundColor: 'white',
-    height: 50
+    height: 40
   },
   map: {
     width: '100%',

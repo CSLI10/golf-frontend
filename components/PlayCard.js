@@ -1,21 +1,27 @@
 import React from 'react';
-import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const PlayCard = ({ onPress, navigation, course }) => {
+const PlayCard = ({ onPress, navigation, course }) => { 
   // const {course} = route.params
   return (
     <View style={styles.cardContainer} onPress={onPress}>
+      <Image 
+        style={styles.stretch} 
+        source={{
+          uri: `${course.image_path[1]}`,
+        }}
+        />
       <View style={styles.row}>
         <TouchableOpacity>
-          <MaterialCommunityIcons name="star" size={40} color="black" />
+          <MaterialCommunityIcons name="star" size={30} color="black" />
         </TouchableOpacity>
         <View>
           <Text style={styles.name}>{course.name}</Text>
           <Text style={styles.body}>{course.location}</Text>
         </View>
         <TouchableOpacity onPress={onPress}>
-          <MaterialCommunityIcons name="golf-tee" size={40} color="black" />
+          <MaterialCommunityIcons name="golf-tee" size={30} color="black" />
         </TouchableOpacity>
       </View>
     </View>
@@ -25,9 +31,11 @@ const PlayCard = ({ onPress, navigation, course }) => {
 const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: 'white',
-    padding: 20,
-    width: '100%',
-    borderRadius: 10,
+    padding: 0,
+    width: 250,
+    height: 130,
+    justifyContent: 'center',
+    borderRadius: 0,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -36,16 +44,23 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    marginVertical: 1,
+    marginVertical: 0,
+  },
+  stretch: {
+    width: '100%',
+    height: 90,
+    resizeMode: 'stretch',
+    // borderTopLeftRadius: 80,
+    // borderTopRightRadius: 80,
   },
   name: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
   },
   body: {
-    fontSize: 15,
+    fontSize: 12,
     textAlign: 'center',
     marginBottom: 10,
   },

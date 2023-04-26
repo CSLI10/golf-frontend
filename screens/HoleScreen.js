@@ -70,7 +70,7 @@ const HoleScreen = ({ navigation, route }) => {
       else if (form[i].score - course.scorecard[i].par === 0) pars += 1;
       else if (form[i].score - course.scorecard[i].par === 1) bogeys += 1;
       else if (form[i].score - course.scorecard[i].par === 2) double += 1;
-      else if (form[i].score - course.scorecard[i].par === 3) triple_plus += 1;
+      else if (form[i].score - course.scorecard[i].par >= 3) triple_plus += 1;
     }
 
     for (let i = 0; i < form.length; i++) {
@@ -131,7 +131,7 @@ const HoleScreen = ({ navigation, route }) => {
     newForm[i][prop] = value;
     setForm(newForm);
     console.log(form);
-  };
+  }; 
 
   const prevHole = () => {
     if (currentHole >= 1) {

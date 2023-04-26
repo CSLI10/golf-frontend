@@ -3,27 +3,8 @@ import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity, ActivityInd
 import { AuthContext } from '../context/AuthContext';
 import { VictoryBar, VictoryChart, VictoryTheme, VictoryPie, VictoryLabel } from "victory-native";
 import Svg, { Circle, Text as SvgText } from 'react-native-svg';
-
-const MyTable = ({ data }) => {
-  return (
-    <VictoryChart theme={VictoryTheme.material} domainPadding={{ x: 50 }}>
-      <VictoryBar
-        data={data}
-        style={{ data: { fill: "#148eb0" }, labels: { fill: "#148eb0" } }}
-        labels={({ datum }) => datum.score}
-        labelComponent={<VictoryLabel dy={0} />}
-        barRatio={0.5}
-        animate={{
-          duration: 2000,
-          onLoad: { duration: 1000 },
-        }}
-        alignment="middle"
-        x="date"
-        y="score"
-      />
-    </VictoryChart>
-  );
-};
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { ScrollView } from 'native-base';
 
 const ShowStat = ({ stat }) => {
   const { userInfo } = useContext(AuthContext);
@@ -34,9 +15,6 @@ const ShowStat = ({ stat }) => {
     userInfo.stats.fairways_hit;
   // const {stats, setStats} = useState(null);
   const { isLoading, setIsLoading } = useState(true);
-  // let isLoading = true;
-  // let scoresChart = [];
-  // const {scoresChart, setScoresChart} = useState([]);
   const scoresChart = useMemo(() => {
     let scoresArray = [];
     for (let i = 0; i < userInfo.played_courses.length; i++) {
@@ -52,8 +30,7 @@ const ShowStat = ({ stat }) => {
     for (let i = 0; i < userInfo.played_courses.length; i++) {
       puttsArray.push({
         date: userInfo.played_courses[i].round.date_played,
-        score:
-          Math.round((userInfo.played_courses[i].round.putts / 18) * 10) / 10,
+        score: Math.round((userInfo.played_courses[i].round.putts / 18) * 10) / 10,
       });
     }
     return puttsArray;
@@ -63,24 +40,10 @@ const ShowStat = ({ stat }) => {
     { x: "Eagle +", y: userInfo.stats.eagles + userInfo.stats.albatrosses },
     { x: "Bogey", y: userInfo.stats.bogeys },
     { x: "Birdie", y: userInfo.stats.birdies },
-    { x: "Double +", y: userInfo.stats.double + userInfo.stats.triple_plus },
     { x: "Par", y: userInfo.stats.pars },
+    { x: "Double +", y: userInfo.stats.double + userInfo.stats.triple_plus },
+    
   ];
-
-  // const scoresChart = [
-  //   { date: userInfo.played_courses[0].round.date_played, score: userInfo.played_courses[0].round.total_score },
-  //   { date: userInfo.played_courses[1].round.date_played, score: userInfo.played_courses[1].round.total_score },
-  //   { date: userInfo.played_courses[2].round.date_played, score: userInfo.played_courses[2].round.total_score },
-  //   { date: userInfo.played_courses[3].round.date_played, score: userInfo.played_courses[3].round.total_score },
-  //   { date: userInfo.played_courses[4].round.date_played, score: userInfo.played_courses[4].round.total_score },
-  //   { date: userInfo.played_courses[5].round.date_played, score: userInfo.played_courses[5].round.total_score }
-  // ]
-
-  // const puttsChart = [
-  //   { date: userInfo.played_courses[0].round.date_played, score: Math.round(userInfo.played_courses[0].round.putts/18 * 10)/10 },
-  //   { date: userInfo.played_courses[1].round.date_played, score: Math.round(userInfo.played_courses[1].round.putts/18 * 10)/10 },
-  //   { date: userInfo.played_courses[2].round.date_played, score: Math.round(userInfo.played_courses[2].round.putts/18 * 10)/10 }
-  // ]
 
   const fairwaysPie = [
     { x: "Right", y: userInfo.stats.fairway_missed_right },
@@ -88,27 +51,6 @@ const ShowStat = ({ stat }) => {
     { x: "Left", y: userInfo.stats.fairway_missed_left },
   ];
 
-  //   useEffect(() => {
-  //       makeCharts()
-  //     }, []);
-
-  const makeCharts = () => {
-    //   isLoading = true;
-    // setIsLoading(true);
-    let scoresArray = [];
-    let data = { date: null, score: null };
-    for (let i = 0; i < userInfo.played_courses.length; i++) {
-      data.date = userInfo.played_courses[i].round.date_played;
-      data.score = userInfo.played_courses[i].round.total_score;
-      scoresArray.push(data);
-    }
-    //   setScoresChart(scoresArray);
-    // scoresChart = scoresArray;
-    // isLoading = false;
-    return scoresArray;
-
-    //   setIsLoading(false);
-  };
   const percentage = Math.round(
     (userInfo.stats.greens_hit / (userInfo.stats.rounds_played * 18)) * 100
   );
@@ -126,13 +68,19 @@ const ShowStat = ({ stat }) => {
 
   if (stat === "Scores") {
     return (
-      <VictoryChart theme={VictoryTheme.material} domainPadding={{ x: 20 }}>
+      <View style={styles.scores}>
+      <View style={styles.row}>
+        <Text style={styles.title}>{stat} </Text>
+        <MaterialCommunityIcons name="chart-bar" size={64} color="black" />
+      </View>
+      <ScrollView horizontal>
+      <VictoryChart theme={VictoryTheme.material} domainPadding={{ x: 15 }}>
         <VictoryBar
           data={scoresChart}
-          style={{ data: { fill: "#148eb0" }, labels: { fill: "#148eb0" } }}
+          style={{ data: { fill: "#779dfa" }, labels: { fill: "black" } }}
           labels={({ datum }) => datum.score}
-          labelComponent={<VictoryLabel dy={0} />}
-          barRatio={0.5}
+          labelComponent={<VictoryLabel dy={-5} />}
+          barRatio={1}
           animate={{
             duration: 2000,
             onLoad: { duration: 1000 },
@@ -142,6 +90,10 @@ const ShowStat = ({ stat }) => {
           y="score"
         />
       </VictoryChart>
+      </ScrollView>
+      <Text style={styles.scoreText}>Average Score Overall: {Math.round(userInfo.stats.total_score / userInfo.stats.rounds_played)}</Text>
+      </View>
+
     );
   }
   //       if(stat === "Scores"){
@@ -151,20 +103,145 @@ const ShowStat = ({ stat }) => {
   //   }
   else if (stat === "Score Distribution") {
     return (
+      <>
+      <View style={styles.row}>
+        <Text style={styles.title}>{stat} </Text>
+        <MaterialCommunityIcons name="golf" size={64} color="black" />
+      </View>
       <VictoryPie
         width={350}
         theme={VictoryTheme.material}
+        colorScale={["#1cb41c", "#E83b3b", "gold", "#34aff6", "#A82eb9" ]}
         data={statsPie}
+        style={{ labels: { fill: "black" } }}
+        labels={({ datum }) =>
+          `${Math.round((datum.y / (userInfo.stats.rounds_played*18)) * 100)}%`
+        }
+        labelComponent={<VictoryLabel dy={0} dx={-10} />}
         animate={{
           duration: 2000,
         }}
       />
+      <View style={styles.row}>
+        <Svg width={120} height={50}>
+            <Circle
+              cx={25}
+              cy={25}
+              r={15} // subtract 10 from radius to create space for stroke width
+              fill="#1cb41c"
+              strokeWidth={1} // circle stroke width
+              stroke="grey"
+            />
+            <SvgText
+              x={45}
+              y={30}
+              fontSize={12}
+              fill="#000" // percentage text color
+              textAnchor="right"
+              alignmentBaseline="right"
+            >
+              Eagle +
+            </SvgText>
+          </Svg>
+          <Svg width={120} height={50}>
+            <Circle
+              cx={25}
+              cy={25}
+              r={15} // subtract 10 from radius to create space for stroke width
+              fill="#E83b3b"
+              strokeWidth={1} // circle stroke width
+              stroke="grey"
+            />
+            <SvgText
+              x={45}
+              y={30}
+              fontSize={12}
+              fill="#000" // percentage text color
+              textAnchor="right"
+              alignmentBaseline="right"
+            >
+              Bogey
+            </SvgText>
+          </Svg>
+          <Svg width={120} height={50}>
+            <Circle
+              cx={25}
+              cy={25}
+              r={15} // subtract 10 from radius to create space for stroke width
+              fill="gold"
+              strokeWidth={1} // circle stroke width
+              stroke="grey"
+            />
+            <SvgText
+              x={45}
+              y={30}
+              fontSize={12}
+              fill="#000" // percentage text color
+              textAnchor="right"
+              alignmentBaseline="right"
+            >
+              Birdie
+            </SvgText>
+          </Svg>
+      </View>
+      <View style={styles.row}>
+        <Svg width={120} height={50}>
+            <Circle
+              cx={25}
+              cy={25}
+              r={15} // subtract 10 from radius to create space for stroke width
+              fill="#34aff6"
+              strokeWidth={1} // circle stroke width
+              stroke="grey"
+            />
+            <SvgText
+              x={45}
+              y={30}
+              fontSize={12}
+              fill="#000" // percentage text color
+              textAnchor="right"
+              alignmentBaseline="right"
+            >
+              Par
+            </SvgText>
+          </Svg>
+          <Svg width={120} height={50}>
+            <Circle
+              cx={25}
+              cy={25}
+              r={15} // subtract 10 from radius to create space for stroke width
+              fill="#A82eb9"
+              strokeWidth={1} // circle stroke width
+              stroke="grey"
+            />
+            <SvgText
+              x={45}
+              y={30}
+              fontSize={12}
+              fill="#000" // percentage text color
+              textAnchor="right"
+              alignmentBaseline="right"
+            >
+              Double +
+            </SvgText>
+          </Svg>
+      </View>
+      </>
+
     );
   } else if (stat === "Fairways Hit") {
     return (
+      <>
+      <View style={styles.rowFairway}>
+      <Text style={styles.title}>{stat} </Text>
+      <MaterialCommunityIcons name="golf-tee" size={64} color="black" />
+      </View>
+
       <VictoryPie
         width={400}
+        height={400}
         theme={VictoryTheme.material}
+        colorScale={["#E83b3b", "#1cb41c", "gold" ]}
         data={fairwaysPie}
         startAngle={90}
         endAngle={-90}
@@ -177,10 +254,75 @@ const ShowStat = ({ stat }) => {
           duration: 2000,
         }}
       />
+      <View style={styles.rowFairway}>
+        <Svg width={120} height={50}>
+            <Circle
+              cx={25}
+              cy={25}
+              r={15} // subtract 10 from radius to create space for stroke width
+              fill="gold"
+              strokeWidth={1} // circle stroke width
+              stroke="grey"
+            />
+            <SvgText
+              x={45}
+              y={30}
+              fontSize={12}
+              fill="#000" // percentage text color
+              textAnchor="right"
+              alignmentBaseline="right"
+            >
+              Missed Left
+            </SvgText>
+          </Svg>
+          <Svg width={120} height={50}>
+            <Circle
+              cx={25}
+              cy={25}
+              r={15} // subtract 10 from radius to create space for stroke width
+              fill="#1cb41c"
+              strokeWidth={1} // circle stroke width
+              stroke="grey"
+            />
+            <SvgText
+              x={45}
+              y={30}
+              fontSize={12}
+              fill="#000" // percentage text color
+              textAnchor="right"
+              alignmentBaseline="right"
+            >
+              Fairway Hit
+            </SvgText>
+          </Svg>
+          <Svg width={120} height={50}>
+            <Circle
+              cx={25}
+              cy={25}
+              r={15} // subtract 10 from radius to create space for stroke width
+              fill="#E83b3b"
+              strokeWidth={1} // circle stroke width
+              stroke="grey"
+            />
+            <SvgText
+              x={45}
+              y={30}
+              fontSize={12}
+              fill="#000" // percentage text color
+              textAnchor="right"
+              alignmentBaseline="right"
+            >
+              Missed Right
+            </SvgText>
+          </Svg>
+      </View>
+
+      </>
+
     );
   } else if (stat === "Putts per Hole") {
     return (
-      <VictoryChart theme={VictoryTheme.material} domainPadding={{ x: 50 }}>
+      <VictoryChart theme={VictoryTheme.material} domainPadding={{ x: 20 }}>
         <VictoryBar
           data={puttsChart}
           style={{ data: { fill: "#148eb0" }, labels: { fill: "#148eb0" } }}
@@ -234,7 +376,7 @@ const ShowStat = ({ stat }) => {
       </View>
     );
   }
-};
+}; 
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -254,6 +396,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     alignItems: "center",
   },
+  scoreText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 190,
+    marginTop: 15,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginTop: 15,
+  },
   name: {
     fontSize: 16,
     fontWeight: "bold",
@@ -265,6 +419,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 10,
   },
+  row: {
+    flexDirection: 'row',
+  },
+  rowFairway: {
+    flexDirection: 'row',
+    marginTop: -100,
+    marginBottom: 25
+  },
+  scores: {
+    marginTop: '25%',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 });
 
 export default ShowStat;

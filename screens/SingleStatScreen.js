@@ -7,8 +7,10 @@ const SingleStatScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{stat}</Text>
-      <ShowStat stat={stat}/>
+      <View style={styles.card}>
+        {/* <Text style={styles.title}>{stat}</Text> */}
+        <ShowStat stat={stat}/>
+      </View>
     </View>
   ); 
 };
@@ -18,13 +20,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20
+    padding: 0
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20
+    marginBottom: 20,
+    marginTop: 20
+  },
+  card: {
+    height: '95%',
+    width: '95%',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: '#fff',
+    margin: 10
   },
 });
 
-export default SingleStatScreen;
+export default SingleStatScreen; 

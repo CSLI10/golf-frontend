@@ -16,7 +16,7 @@ const SubmitRoundForm = ({ navigation, visible, onClose, submitRound, form, scor
       </View>
     </Modal>
   );
-};
+}; 
 
 const styles = StyleSheet.create({
   container: {
