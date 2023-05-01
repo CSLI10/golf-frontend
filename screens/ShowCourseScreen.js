@@ -1,30 +1,95 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, Image, ActivityIndicator, ScrollView, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, StyleSheet, Button, Image, ActivityIndicator, ScrollView, FlatList, TouchableOpacity, ImageBackground } from 'react-native';
 import axios from 'axios';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AuthContext } from '../context/AuthContext';
 
 const ShowCourseScreen = ({ navigation, route }) => {
+  const {userInfo} = useContext(AuthContext);
   const [course, setCourse] = useState(null);
+  const [refresh, setRefresh] = useState(0);
   const {id}  = route.params;
+  const image = {uri: "https://www.hartough.com/uploads/Thumbnails/11th-hole-white-dogwood-augusta-national-golf-club-1996.jpg"};
   // const {course}  = route.params;
 
   useEffect(() => {
     axios
       .get(`https://golf-backend-app.vercel.app/api/courses/${id}`)
-      .then(async (response) => {
+      .then((response) => {
         console.log(response.data);
-        await setCourse(response.data);
+        setCourse(response.data);
         console.log(id)
         console.log(course)
       })
       .catch((err) => {
         console.error(err); 
       });
-  }, []);
+  }, [refresh]);
+
+  const makeFav = () => {
+    let favs = userInfo.favourite_courses;
+    favs.push(id);
+    axios
+    .put(`https://golf-backend-app.vercel.app/api/users/${userInfo._id}`, {
+      favourite_courses: favs
+    })
+    .then((response) => {
+      console.log("favourited");
+      console.log(response.data);
+      setRefresh(refresh + 1);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  }
+
+  const deleteFav = () => {
+    let index = null;
+    let favs = userInfo.favourite_courses;
+
+    for(let i = 0; i < userInfo.favourite_courses.length; i++){
+      if(userInfo.favourite_courses[i] === id){
+        index = i;
+      }
+    }
+
+    favs.splice(index, 1);
+
+    
+    axios
+    .put(`https://golf-backend-app.vercel.app/api/users/${userInfo._id}`, {
+      favourite_courses: favs
+    })
+    .then((response) => {
+      console.log("unfavourited");
+      console.log(response.data);
+      setRefresh(refresh + 1);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  }
+
+  const FollowButton = () => {
+    if (userInfo.favourite_courses.includes(id)) {
+      return (
+        <TouchableOpacity style={styles.following} onPress={() => deleteFav()}>
+          <Text style={styles.followedText}>Favourited <MaterialCommunityIcons name="heart" size={15} color="white" /></Text>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity style={styles.follow} onPress={() => makeFav()}>
+          <Text style={styles.followText}>Favourite <MaterialCommunityIcons name="heart-outline" size={15} color="black" /></Text>
+        </TouchableOpacity>
+      );
+    }
+  };
  
   if(course != null){
     return (
-      <>
+      <View style={styles.container}>
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
       <View style={styles.card}> 
         <Image 
         style={styles.stretch} 
@@ -32,7 +97,13 @@ const ShowCourseScreen = ({ navigation, route }) => {
           uri: `${course.image_path[1]}`,
         }}
         />
+        <View style={styles.rowHeart}>
         <Text style={styles.name}>{course.name}</Text> 
+        {/* <HeartButton /> */}
+        </View>
+        {/* <Text style={styles.name}>{course.name}</Text> 
+        <HeartButton /> */}
+        <FollowButton />
         <Text style={styles.location}>{course.location}</Text>
         <Text style={styles.location}>Rating: {course.rating}</Text>
         <Text style={styles.description} numberOfLines={0}>{course.description}</Text>
@@ -88,13 +159,15 @@ const ShowCourseScreen = ({ navigation, route }) => {
       {/* <View style={styles.divider} /> */}
         <View style={styles.row}>
           <TouchableOpacity onPress={() => navigation.navigate('HoleScreen', { course: course })}>
-            <Text style={styles.scorecard}>Play <MaterialCommunityIcons name="play-circle" size={20} color="black" /></Text>
+            <Text style={styles.play}>Play <MaterialCommunityIcons name="play-circle" size={20} color="black" /></Text>
           </TouchableOpacity>
           {/* <Button title={'Play'} onPress={() => navigation.navigate('HoleScreen', { course: course })}/>
           <Button title={'Website'}/> */}
         </View>
       </View>
-      </>
+      </ImageBackground>
+      </View>
+
 
     );
   }
@@ -113,21 +186,68 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center', 
+    justifyContent: 'center'
   },
-      divider: {
-        borderBottomColor: '#6e6e6e',
-        borderBottomWidth: 1,
-        marginTop: 0,
-      },
+  divider: {
+    borderBottomColor: '#6e6e6e',
+    borderBottomWidth: 1,
+    marginTop: 0,
+  },
+  follow: {
+    marginLeft: 10,
+    marginVertical: 5,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 20,
+    borderColor: 'black',
+    backgroundColor: 'white',
+    height: 30,
+    width: 100
+  },
+  following: {
+    marginLeft: 10,
+    marginVertical: 5,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 20,
+    borderColor: 'black',
+    backgroundColor: 'black',
+    height: 30,
+    width: 100
+  },
+  followText: {
+    fontSize: 14,
+    // fontWeight: 'bold'
+  },
+  followedText: {
+    color: 'white',
+    fontSize: 14
+  },
   scorecard: {
     fontSize: 20,
     fontWeight: 'bold',
-    paddingLeft: 10,
-    marginBottom: 10
+    paddingLeft: '35%',
+    marginBottom: 10,
+  },
+  image: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    borderRadius: 0,
+    marginVertical: 1,
+  },
+  play: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   card: {
     borderWidth: 1,
     borderColor: '#ccc',
+    width: '95%',
     borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#fff',
@@ -217,7 +337,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   rowScore: {
+    flexDirection: 'row',
+    margin: 10
+  },
+  rowHeart: {
     flexDirection: 'row'
+  },
+  heart: {
+    paddingTop: 7,
+    alignItems: 'flex-end'
   }
 });
 

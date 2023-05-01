@@ -12,6 +12,7 @@ import LoginForm from '../components/LoginForm';
 import StatsScreen from '../screens/StatsScreen';
 import SingleStatScreen from '../screens/SingleStatScreen';
 import FavouriteCoursesScreen from '../screens/FavouriteCoursesScreen';
+import PreviousRoundsScreen from '../screens/PreviousRoundsScreen';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,7 @@ export default function AppStack() {
       <Stack.Screen name="LoginForm" component={LoginForm} />
       <Stack.Screen name="StatsScreen" component={StatsScreen} />
       <Stack.Screen name="FavouriteCoursesScreen" component={FavouriteCoursesScreen} />
+      <Stack.Screen name="PreviousRoundsScreen" component={PreviousRoundsScreen} />
       <Stack.Screen name="SingleStatScreen" component={SingleStatScreen} />
     </Stack.Navigator>
   );

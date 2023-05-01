@@ -80,7 +80,9 @@ const ShowStat = ({ stat }) => {
           style={{ data: { fill: "#779dfa" }, labels: { fill: "black" } }}
           labels={({ datum }) => datum.score}
           labelComponent={<VictoryLabel dy={-5} />}
-          barRatio={1}
+          // barRatio={1}
+          barWidth={40}
+          grouped={false}
           // animate={{
           //   duration: 2000,
           //   onLoad: { duration: 1000 },
@@ -112,7 +114,7 @@ const ShowStat = ({ stat }) => {
             style={{ data: { fill: "#779dfa" }, labels: { fill: "black" } }}
             labels={({ datum }) => datum.score}
             labelComponent={<VictoryLabel dy={-5} />}
-            barRatio={1}
+            barWidth={40}
             // animate={{
             //   duration: 2000,
             //   onLoad: { duration: 1000 },
@@ -378,7 +380,7 @@ const ShowStat = ({ stat }) => {
             stroke="#45bb2b" // circle stroke color
             strokeWidth={10} // circle stroke width
             strokeDasharray={`${circumference}, ${circumference}`}
-            strokeDashoffset={strokeDashoffset}
+            strokeDashoffset={strokeDashoffset + 25}
           />
 
           <SvgText

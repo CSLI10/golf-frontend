@@ -2,33 +2,23 @@ import React from "react";
 import { Text, StyleSheet, TouchableOpacity, ScrollView, FlatList, View, } from "react-native";
 import Svg, { Circle, Text as SvgText } from 'react-native-svg';
 
-const RoundReview = ({ form, course }) => {
+const PreviousRound = ({ round, course }) => {
 
-  const ScoreText = () => {
-    let showScore = 0;
-    let total = 0;
-    for (let i = 0; i < form.length; i++) {
-      if (form[i].score) {
-        showScore += form[i].score - course.scorecard[i].par;
-        total += form[i].score;
-      }
+    const ScoreText = (text) => {
+        if(text>0){
+            return '+' + text
+        }
+        else{ 
+        return text;
+        }
     }
-    // setScore(showScore);
-    if (showScore === 0) {
-      return <Text style={styles.score}>{total} (E) </Text>;
-    } else if (showScore < 0) {
-      return <Text style={styles.score}> {total} ({showScore}) </Text>;
-    } else if (showScore > 0) {
-      return <Text style={styles.score}> {total} (+{showScore}) </Text>;
-    }
-  };
 
   return (
     <View style={styles.cardContainer}>
       <View >
-        
-        <Text style={styles.name}>{course.name}</Text>
-        <ScoreText />
+      <Text style={styles.name}>{course.name}</Text>
+        <Text style={styles.date}>{round.date_played}</Text>
+        <Text style={styles.score}>{round.total_score} ({ScoreText(round.score_to_par)})</Text>
       </View>
       
       <View style={styles.row}>
@@ -44,7 +34,7 @@ const RoundReview = ({ form, course }) => {
             <FlatList 
               horizontal={true}
               scrollEnabled={false}
-              data={form}
+              data={round.scorecard}
               keyExtractor={(item) => item.hole.toString()}
               renderItem={({ item }) => (
                 <Text style={[styles.cell2, styles.item]}> {item.hole} </Text>
@@ -71,7 +61,7 @@ const RoundReview = ({ form, course }) => {
             <FlatList
               horizontal={true}
               scrollEnabled={false}
-              data={form}
+              data={round.scorecard}
               keyExtractor={(item) => item.hole.toString()}
               renderItem={({ item }) => (
                 <Text style={[styles.cell2, styles.item]}> {item.score} </Text>
@@ -80,7 +70,7 @@ const RoundReview = ({ form, course }) => {
             <FlatList
               horizontal={true}
               scrollEnabled={false}
-              data={form}
+              data={round.scorecard}
               keyExtractor={(item) => item.hole.toString()}
               renderItem={({ item }) => (
                 <Text style={[styles.cell2, styles.item]}> {item.putts} </Text>
@@ -93,6 +83,7 @@ const RoundReview = ({ form, course }) => {
   );
 };
 
+const HoleBreakdown = (form) => {};
 
 const styles = StyleSheet.create({
   scroll: {
@@ -161,11 +152,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 10,
+    marginBottom: 0,
+  },
+  date: {
+    textAlign: 'center',
+    fontSize: 16
   },
   score: {
     textAlign: 'center',
-    fontSize: 20,
+    fontSize: 18,
     marginBottom: 10
   },
   body: {
@@ -180,4 +175,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RoundReview;
+export default PreviousRound;

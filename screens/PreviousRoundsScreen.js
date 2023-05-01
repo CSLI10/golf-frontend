@@ -1,4 +1,4 @@
-import React, { useState ,useEffect, useContext } from 'react';
+import React, { useState ,useEffect, useContext, useMemo } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, Button, ImageBackground, ActivityIndicator } from 'react-native';
 // import courses from "../assets/list_courses.json"; 
 import CourseSquare from "../components/CourseSquare"
@@ -6,42 +6,39 @@ import PlayCard from '../components/PlayCard';
 import axios from "axios";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from '../context/AuthContext';
+import RoundReview from '../components/RoundReview';
+import PreviousRound from '../components/PreviousRound';
 
-const FavouriteCoursesScreen = ( { navigation }) => {
+const PreviousRoundsScreen = ( { navigation }) => {
   const {userInfo} = useContext(AuthContext)
   const [courses, setCourses] = useState(null);
   const [coursesList, setCoursesList] = useState(null);
+  const [playedCourses, setPlayedCourses] = useState(userInfo.played_courses.reverse());
   const image = {uri: "https://www.hartough.com/uploads/Thumbnails/11th-hole-white-dogwood-augusta-national-golf-club-1996.jpg"}
+//   const playedCourses = userInfo.played_courses.reverse();
 
   useEffect(() => {
     axios
-      .get("https://golf-backend-app.vercel.app/api/courses")
-      .then((response) => {
-        // console.log(response.data);
-        setCourses(response.data);
-        getFavs(response.data)
-      })  
-      .catch((err) => {
-        console.error(err);
-      });
+    .get("https://golf-backend-app.vercel.app/api/courses")
+    .then((response) => {
+      // console.log(response.data);
+      setCourses(response.data);
+    //   setPlayedCourses(response.data.reverse())
+    })  
+    .catch((err) => {
+      console.error(err);
+    });
   }, []);
 
-  const getFavs = (courses) => {
-    let favArray = []
-    if(courses){
-        for(let i = 0; i < userInfo.favourite_courses.length; i++){
-            for(let j = 0; j < courses.length; j++){
-                if(courses[j]._id === userInfo.favourite_courses[i]){
-                    favArray.push(courses[j])
-                    console.log(courses[j].name)
-                }
-            }
+  const getCourse = (id) => {
+    let course = null;
+    for(let i = 0; i < courses.length; i++){
+        if(courses[i]._id === id){
+            course = courses[i]; 
         }
-        // setTimeout(1000, getFavs);
-        setCoursesList(favArray)
     }
 
-    
+    return course;
   }
 
 
@@ -59,23 +56,33 @@ const FavouriteCoursesScreen = ( { navigation }) => {
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
           <View style={styles.top}>
             <MaterialCommunityIcons name="golf" size={84} color="white" />
-            <Text style={styles.start}>Favourite Courses</Text>
+            <Text style={styles.start}>Previous Rounds</Text>
           </View>
 
           {/* <PlayCard course={favCourse} onPress={() => navigation.navigate('HoleScreen', { course: favCourse })}/> 
       <PlayCard course={favCourse} onPress={() => navigation.navigate('HoleScreen', { course: favCourse })}/>  */}
-          <FlatList
-            data={coursesList}
-            keyExtractor={(item) => item.name.toString()}
+      <View style={styles.list}>
+      <FlatList
+            data={playedCourses}
+            keyExtractor={(item) => item.round_id.toString()}
             renderItem={({ item }) => (
-              <PlayCard
-                course={item}
-                onPress={() =>
-                  navigation.navigate("HoleScreen", { course: item })
-                }
-              />
+                <View style={styles.roundCard}>
+                    <PreviousRound round={item.round} course={getCourse(item.course)}/>
+                </View>
+                
             )}
           />
+      </View>
+          {/* <FlatList
+            data={userInfo.played_courses}
+            keyExtractor={(item) => item.round.date_played.toString()} 
+            renderItem={({ item }) => (
+                <View style={styles.roundCard}>
+                    <RoundReview form={item.round.scorecard} scorecard={getCourse(item.course).scorecard}/>
+                </View>
+                
+            )}
+          /> */}
         </ImageBackground>
       </View>
     );
@@ -88,6 +95,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  roundCard: {
+    margin: 10,
+    width: '100%'
+  },
+  list: {
+    width: '100%'
+  },
   start: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -95,7 +109,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   top: {
-    paddingTop: 150,
+    paddingTop: 0,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 5
@@ -131,4 +145,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FavouriteCoursesScreen;
+export default PreviousRoundsScreen;

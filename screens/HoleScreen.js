@@ -93,6 +93,7 @@ const HoleScreen = ({ navigation, route }) => {
     };
     let roundsPush = {
       course: course._id,
+      round_id: userInfo.played_courses.length+1,
       round: round,
     };
     userStats.rounds_played += 1;
@@ -247,7 +248,7 @@ const HoleScreen = ({ navigation, route }) => {
       />
       <SubmitRoundForm
         form={form}
-        scorecard={course.scorecard}
+        course={course}
         visible={submitVisible}
         onClose={handleCloseSubmit}
         submitRound={submitRound}

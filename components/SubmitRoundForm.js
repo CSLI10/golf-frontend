@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { View, Text, Modal, TextInput, StyleSheet, Button, ImageBackground } from 'react-native';
 import RoundReview from './RoundReview';
 
-const SubmitRoundForm = ({ navigation, visible, onClose, submitRound, form, scorecard }) => {
+const SubmitRoundForm = ({ navigation, visible, onClose, submitRound, form, course }) => {
   const imageForm = {uri: "https://cdn11.bigcommerce.com/s-k5xb3d5nlu/images/stencil/original/products/1018/4626/ANGC13Ri2570-Picture-Frame-Wall-Layouts-24x36-Rich-image1__58726.1647991906.jpg?c=2&imbypass=on&imbypass=on"}
 
   return (
@@ -11,7 +11,7 @@ const SubmitRoundForm = ({ navigation, visible, onClose, submitRound, form, scor
         <View style={styles.container}>
         <ImageBackground source={imageForm} resizeMode="cover" style={styles.image}>
           <Text style={styles.title}>Submit Round</Text>
-          <RoundReview form={form} scorecard={scorecard}/>
+          <RoundReview form={form} course={course}/>
           <View style={styles.buttons}>
             <Button title="Cancel" onPress={onClose} color="white" />
             <Button title="Submit" onPress={() => {submitRound()}} color="white"/>

@@ -32,7 +32,7 @@ const MeScreen = ({ navigation, route }) => {
     // await AsyncStorage.removeItem('_id')
     // route.params.setAuthenticated(0);
     // navigation.navigate('WelcomeScreen')
-  // }
+  // }heartcard
 
   return (
     <View style={styles.container}>
@@ -50,6 +50,9 @@ const MeScreen = ({ navigation, route }) => {
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FavouriteCoursesScreen')}>
          <Text style={styles.settings}><Icon style={styles.icon} name="heart" size={20}/> Favourite Courses</Text>  
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('PreviousRoundsScreen')}>
+         <Text style={styles.settings}><Icon style={styles.icon} name="ios-play-back-outline" size={20}/> Previous Rounds</Text>  
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => {logout()}}>
          <Text style={styles.settings}><Icon style={styles.icon} name="log-out-outline" size={20}/> Sign Out</Text>  
