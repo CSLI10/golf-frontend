@@ -38,17 +38,17 @@ const MeScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       {/* <Text style={styles.text}>Me</Text> */}
       <ImageBackground source={image} resizeMode="cover" style={styles.card}>
-      <View style={styles.buttonBig}>
+      {/* <View style={styles.buttonBig}> */}
         <MaterialCommunityIcons name="golf-cart" size={64} color="white" />
         <Text style={styles.text}>Hi {userInfo.name}!</Text>
-      </View>
+      {/* </View> */}
       <TouchableOpacity style={styles.button}> 
          <Text style={styles.settings}><Icon style={styles.icon} name="create" size={20}/> Edit Profile</Text>  
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('StatsScreen')}>
          <Text style={styles.settings}><Icon style={styles.icon} name="trending-up" size={20}/> Stats</Text>  
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FavouriteCoursesScreen')}>
          <Text style={styles.settings}><Icon style={styles.icon} name="heart" size={20}/> Favourite Courses</Text>  
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => {logout()}}>
@@ -120,7 +120,8 @@ const styles = StyleSheet.create({
   text: { 
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white'
+    color: 'white',
+    paddingBottom: 10
   },
   settings: {
     fontSize: 20

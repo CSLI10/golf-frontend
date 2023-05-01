@@ -7,7 +7,7 @@ import { AuthContext } from '../context/AuthContext';
 
 const LoginForm = ({ navigation, visible, onClose, image }) => {
 
-    const {login} = useContext(AuthContext) 
+    const {login, errorAuth} = useContext(AuthContext) 
 
     // const imageForm = {uri: "https://cdn11.bigcommerce.com/s-k5xb3d5nlu/images/stencil/original/products/1018/4626/ANGC13Ri2570-Picture-Frame-Wall-Layouts-24x36-Rich-image1__58726.1647991906.jpg?c=2&imbypass=on&imbypass=on"}
     // const image = require('../assets/12thGreenPic.png')
@@ -24,6 +24,7 @@ const LoginForm = ({ navigation, visible, onClose, image }) => {
           style={styles.input}
           value={emailValue}
           onChangeText={setEmailValue}
+          keyboardType="email-address"
           placeholder="Email"
           placeholderTextColor="grey"
         />
@@ -34,6 +35,7 @@ const LoginForm = ({ navigation, visible, onClose, image }) => {
           placeholder="Password"
           placeholderTextColor="grey"
         />
+        <Text style={styles.error}>{errorAuth}</Text>
         <View style={styles.buttons}>
           <Button title="Cancel" color='white' onPress={onClose} />
           <Button title="Submit" color='white' onPress={() => {login(emailValue, passwordValue)}} />
@@ -52,6 +54,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
   },
+  error: {
+    color: 'red'
+  },
   image: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -64,7 +69,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: 'white'
+    color: 'white',
+    marginTop: -100
   },
   input: {
     borderWidth: 1,

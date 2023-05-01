@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, StyleSheet, Button, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Button, FlatList, ImageBackground } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 import { VictoryBar, VictoryChart, VictoryTheme, VictoryPie } from "victory-native";
 import StatCard from '../components/StatCard';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const StatsScreen = ({ navigation }) => {
   const {userInfo} = useContext(AuthContext);
+  const image = {uri: "https://www.hartough.com/uploads/Thumbnails/11th-hole-white-dogwood-augusta-national-golf-club-1996.jpg"}
   // const {stats, setStats} = useState(null);
   // const {rounds, setRounds} = useState(null) 
   const statsPie = [
@@ -16,10 +18,10 @@ const StatsScreen = ({ navigation }) => {
     { x: "Par", y: userInfo.stats.pars },
   ];
 
-  const scoresChart = [
-    { date: userInfo.played_courses[0].round.date_played, score: userInfo.played_courses[0].round.total_score },
-    { date: userInfo.played_courses[1].round.date_played, score: userInfo.played_courses[1].round.total_score }
-  ]
+  // const scoresChart = [
+  //   { date: userInfo.played_courses[0].round.date_played, score: userInfo.played_courses[0].round.total_score },
+  //   { date: userInfo.played_courses[1].round.date_played, score: userInfo.played_courses[1].round.total_score }
+  // ]
 
   const statsOptions = [
     { stat: "Scores", icon: "chart-bar" },
@@ -32,15 +34,22 @@ const StatsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Stats</Text>
-      <FlatList
-            data={statsOptions}
-            numColumns={2}
-            keyExtractor={(item) => item.stat}
-            renderItem={({ item }) => (
-              <StatCard stat={item.stat} icon={item.icon} onPress={() => navigation.navigate('SingleStatScreen', { stat: item.stat })}/>
-            )}
-          />
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        <View style={styles.top}>
+        <MaterialCommunityIcons name="chart-timeline-variant-shimmer" size={74} color="white" />
+        <Text style={styles.title}>Statistics</Text>
+        </View>
+
+        <FlatList
+              data={statsOptions}
+              numColumns={2}
+              keyExtractor={(item) => item.stat}
+              renderItem={({ item }) => (
+                <StatCard stat={item.stat} icon={item.icon} onPress={() => navigation.navigate('SingleStatScreen', { stat: item.stat })}/>
+              )}
+            />
+      </ImageBackground>
+
     </View>
   );
 };
@@ -50,13 +59,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 20
+  },
+  top: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 100
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20
+    marginBottom: 20,
+    color: 'white'
   }, 
+  image: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    borderRadius: 0,
+    marginVertical: 1,
+  },
 });
 
 export default StatsScreen;

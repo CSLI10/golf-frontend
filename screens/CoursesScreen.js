@@ -1,5 +1,5 @@
 import React, { useState ,useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TextInput, Button, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TextInput, Button, ImageBackground, ActivityIndicator, Keyboard } from 'react-native';
 // import courses from "../assets/list_courses.json"; 
 import CourseSquare from "../components/CourseSquare"
 import axios from "axios";
@@ -7,69 +7,105 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const CoursesScreen = ( { navigation }) => {
   const [courses, setCourses] = useState(null);
+  const [coursesList, setCoursesList] = useState(null);
+  const [value, setValue] = useState("");
   const image = {uri: "https://www.hartough.com/uploads/Thumbnails/11th-hole-white-dogwood-augusta-national-golf-club-1996.jpg"}
+  const imageForm = {uri: "https://cdn11.bigcommerce.com/s-k5xb3d5nlu/images/stencil/original/products/1018/4626/ANGC13Ri2570-Picture-Frame-Wall-Layouts-24x36-Rich-image1__58726.1647991906.jpg?c=2&imbypass=on&imbypass=on"}
 
   useEffect(() => {
     axios
       .get("https://golf-backend-app.vercel.app/api/courses")
-      .then(async (response) => {
+      .then((response) => {
         // console.log(response.data);
-        await setCourses(response.data);
+        setCourses(response.data);
+        getCourses(response.data)
       })  
       .catch((err) => {
         console.error(err);
       });
   }, []);
 
-        return (
-        <View style={styles.container}> 
-        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-          <View style={styles.top}>
-          <MaterialCommunityIcons name="golf" size={84} color="white" />
-             <Text style={styles.text}>Golf Courses</Text>
-          <SearchBar />
-          </View>
+  const getCourses = (courses) => {
+    if(courses){
+      setCoursesList(courses.filter(
+        (course) =>
+          course.name.toLowerCase().includes(value.toLowerCase()) ||
+          course.location.toLowerCase().includes(value.toLowerCase())
+      ));
+    }
+  }
 
-          <FlatList
-            data={courses}
-            numColumns={2}
-            keyExtractor={(item) => item.name.toString()}
-            renderItem={({ item }) => (
-              <CourseSquare name={item.name} location={item.location} rating={item.rating} image_path={item.image_path[0]} onPress={() => navigation.navigate('ShowCourseScreen', { id: item._id })} />
-            )}
-          />
-        </ImageBackground>
-          {/* <Text style={styles.text}>Courses in Ireland</Text>
-          <SearchBar />
-          <FlatList
-            data={courses}
-            numColumns={2}
-            keyExtractor={(item) => item.name.toString()}
-            renderItem={({ item }) => (
-              <CourseSquare name={item.name} location={item.location} rating={item.rating} image_path={item.image_path[0]} onPress={() => navigation.navigate('ShowCourseScreen', { id: item._id })} />
-            )}
-          /> */}
+  const searchCourses = () => {
+    if(courses){
+      setCoursesList(courses.filter(
+        (course) =>
+          course.name.toLowerCase().includes(value.toLowerCase()) ||
+          course.location.toLowerCase().includes(value.toLowerCase())
+      ));
+    }
+    Keyboard.dismiss();
+  }
+
+  if(!courses){
+    return(
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator color={'black'} size={50} />
+      </View>
+    )
+  }
+  else{
+    return (
+      <View style={styles.container}> 
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        <View style={styles.top}>
+        <MaterialCommunityIcons name="golf" size={84} color="white" />
+           <Text style={styles.text}>Golf Courses</Text>
+        <SearchBar setValue={setValue} value={value} searchCourses={searchCourses}/>
         </View>
-      );
+
+        <FlatList
+          data={coursesList}
+          numColumns={2}
+          keyExtractor={(item) => item.name.toString()}
+          renderItem={({ item }) => (
+            <CourseSquare name={item.name} location={item.location} rating={item.rating} image_path={item.image_path[0]} onPress={() => navigation.navigate('ShowCourseScreen', { id: item._id })} />
+          )}
+        />
+      </ImageBackground>
+        {/* <Text style={styles.text}>Courses in Ireland</Text>
+        <SearchBar />
+        <FlatList
+          data={courses}
+          numColumns={2}
+          keyExtractor={(item) => item.name.toString()}
+          renderItem={({ item }) => (
+            <CourseSquare name={item.name} location={item.location} rating={item.rating} image_path={item.image_path[0]} onPress={() => navigation.navigate('ShowCourseScreen', { id: item._id })} />
+          )}
+        /> */}
+      </View>
+    );
+  }
 } 
  
 
+const SearchBar = ({ setValue, value, searchCourses }) => { 
+  // const [search, setSearch] = useState(''); 
 
-const SearchBar = ({ onSearch }) => {
-    const [search, setSearch] = useState('');
-  
-    return (
-      <View style={styles.container2}>
-        <TextInput
-          style={styles.input}
-          value={search}
-          onChangeText={(text) => setSearch(text)}
-          placeholder='Search Courses...'
-        />
-        <Button title='Search' onPress={() => onSearch(search)} color='white'/>
-      </View>
-    );
-  };
+  return (
+    <View style={styles.container2}>
+      <TextInput 
+        style={styles.input}
+        value={value}
+        onChangeText={(text) => setValue(text)} 
+        placeholder='Search Courses...'
+      />
+      <Button color='white' title='Search' onPress={() => searchCourses(value) }/>
+      {/* <TouchableOpacity>
+        <Text style={styles.search}>Search <MaterialCommunityIcons name="send" size={14} color="white" /></Text>
+      // </TouchableOpacity> */}
+    </View> 
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -78,16 +114,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   top: {
-    paddingTop: 100,
+    paddingTop: 130,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 50
+    paddingBottom: 0,
+    marginBottom: 10
   },
   text: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 10,
+    marginTop: 20,
     color: 'white'
   },
   container2: {

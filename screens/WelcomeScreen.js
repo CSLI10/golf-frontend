@@ -32,9 +32,8 @@ const WelcomeScreen = ({ navigation }) => {
 
   return (
     // <View style={styles.container}>
-                  <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-
-      <Text style={styles.title}>Welcome</Text>
+                  <ImageBackground source={imageForm} resizeMode="cover" style={styles.image}>
+      <Text style={styles.title}>HoleScope</Text>
       {/* <Button title="Log In" style={styles.button} onPress={handleOpenLogin} color="white"/> */}
       <TouchableOpacity style={styles.button} onPress={handleOpenSignup}>
         <Text style={styles.text}>Sign Up</Text>
@@ -71,9 +70,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 40,
-    marginBottom: 20,
+    marginBottom: 70,
+    fontWeight: 'bold',
     color: "white",
-    marginTop: 10 
+    marginTop: 10,
   },
   button: {
     marginTop: 10,
@@ -83,7 +83,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 26,
-    color: 'white'
+    color: 'white',
+    fontWeight: 'bold'
   },
   card: {
     // backgroundColor: 'black',

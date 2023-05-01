@@ -73,18 +73,18 @@ const ShowStat = ({ stat }) => {
         <Text style={styles.title}>{stat} </Text>
         <MaterialCommunityIcons name="chart-bar" size={64} color="black" />
       </View>
-      <ScrollView horizontal>
-      <VictoryChart theme={VictoryTheme.material} domainPadding={{ x: 15 }}>
+      <ScrollView horizontal contentContainerStyle={{ flexGrow: 1 }}>
+      <VictoryChart theme={VictoryTheme.material} width={100 + scoresChart.length * 50} domainPadding={{ x: 30 }}>
         <VictoryBar
           data={scoresChart}
           style={{ data: { fill: "#779dfa" }, labels: { fill: "black" } }}
           labels={({ datum }) => datum.score}
           labelComponent={<VictoryLabel dy={-5} />}
           barRatio={1}
-          animate={{
-            duration: 2000,
-            onLoad: { duration: 1000 },
-          }}
+          // animate={{
+          //   duration: 2000,
+          //   onLoad: { duration: 1000 },
+          // }}
           alignment="middle"
           x="date"
           y="score"
@@ -96,6 +96,38 @@ const ShowStat = ({ stat }) => {
 
     );
   }
+  else if (stat === "Putts per Hole") {
+    return (
+
+
+      <View style={styles.scores}>
+      <View style={styles.row}>
+        <Text style={styles.title}>{stat} </Text>
+        <MaterialCommunityIcons name="chart-bar" size={64} color="black" />
+      </View>
+      <ScrollView horizontal contentContainerStyle={{ flexGrow: 1 }}>
+        <VictoryChart theme={VictoryTheme.material} width={100 + puttsChart.length * 50}  domainPadding={{ x: 30 }}>
+          <VictoryBar
+            data={puttsChart}
+            style={{ data: { fill: "#779dfa" }, labels: { fill: "black" } }}
+            labels={({ datum }) => datum.score}
+            labelComponent={<VictoryLabel dy={-5} />}
+            barRatio={1}
+            // animate={{
+            //   duration: 2000,
+            //   onLoad: { duration: 1000 },
+            // }}
+            alignment="middle"
+            x="date"
+            y="score"
+          />
+        </VictoryChart> 
+      </ScrollView>
+      <Text style={styles.scoreText}>Average Putts: {Math.round(userInfo.stats.putts / userInfo.stats.rounds_played / 18 * 10)/ 10}</Text>
+      </View>
+
+    );
+  } 
   //       if(stat === "Scores"){
   //         return (
   //             <MyTable data={scoresChart} />
@@ -117,7 +149,7 @@ const ShowStat = ({ stat }) => {
         labels={({ datum }) =>
           `${Math.round((datum.y / (userInfo.stats.rounds_played*18)) * 100)}%`
         }
-        labelComponent={<VictoryLabel dy={0} dx={-10} />}
+        labelComponent={<VictoryLabel dy={0} dx={0} />}
         animate={{
           duration: 2000,
         }}
@@ -320,28 +352,15 @@ const ShowStat = ({ stat }) => {
       </>
 
     );
-  } else if (stat === "Putts per Hole") {
+  } 
+  else if (stat === "Green in Regulation") {
     return (
-      <VictoryChart theme={VictoryTheme.material} domainPadding={{ x: 20 }}>
-        <VictoryBar
-          data={puttsChart}
-          style={{ data: { fill: "#148eb0" }, labels: { fill: "#148eb0" } }}
-          labels={({ datum }) => datum.score}
-          labelComponent={<VictoryLabel dy={0} />}
-          barRatio={0.5}
-          animate={{
-            duration: 2000,
-            onLoad: { duration: 1000 },
-          }}
-          alignment="middle"
-          x="date"
-          y="score"
-        />
-      </VictoryChart>
-    );
-  } else if (stat === "Green in Regulation") {
-    return (
-      <View style={{ alignItems: "center" }}>
+      <>
+        <View style={styles.rowFairway}>
+      <Text style={styles.title}>{stat} </Text>
+      <MaterialCommunityIcons name="target" size={64} color="black" />
+      </View>
+        <View style={{ alignItems: "center" }}>
         <Svg width={radius * 2} height={radius * 2}>
           <Circle
             cx={radius}
@@ -356,7 +375,7 @@ const ShowStat = ({ stat }) => {
             cy={radius}
             r={radius - 10} // subtract 10 from radius to create space for stroke width
             fill="transparent"
-            stroke="#2196f3" // circle stroke color
+            stroke="#45bb2b" // circle stroke color
             strokeWidth={10} // circle stroke width
             strokeDasharray={`${circumference}, ${circumference}`}
             strokeDashoffset={strokeDashoffset}
@@ -366,6 +385,7 @@ const ShowStat = ({ stat }) => {
             x={radius}
             y={radius}
             fontSize={24}
+            fontWeight={'bold'}
             fill="#000" // percentage text color
             textAnchor="middle"
             alignmentBaseline="middle"
@@ -374,6 +394,8 @@ const ShowStat = ({ stat }) => {
           </SvgText>
         </Svg>
       </View>
+      </>
+
     );
   }
 }; 
@@ -399,7 +421,7 @@ const styles = StyleSheet.create({
   scoreText: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 190,
+    marginBottom: 100,
     marginTop: 15,
   },
   title: {

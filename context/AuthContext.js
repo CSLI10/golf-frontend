@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState(null);
   // const [userID, setUserID] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [errorAuth, setErrorAuth] = useState("")
 
   const login = (email, password) => {
     setIsLoading(true);
@@ -33,7 +34,7 @@ export const AuthProvider = ({ children }) => {
       .catch((err) => {
         console.error(err);
         console.log(err.response.data);
-        setErrorMessage("Invalid email or password");
+        setErrorAuth("Invalid email or password");
       });
     // setUserToken('iuiasuhd');
     // AsyncStorage.setItem('userToken', userToken);
@@ -87,7 +88,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ login, logout, getUser, isLoading, userToken, userInfo }}
+      value={{ login, logout, getUser, isLoading, userToken, userInfo, errorAuth }}
     >
       {children}
     </AuthContext.Provider>

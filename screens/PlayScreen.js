@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList, ActivityIndicator, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, FlatList, ActivityIndicator, TouchableOpacity, ImageBackground, Keyboard } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import PlayCard from '../components/PlayCard';
@@ -14,6 +14,8 @@ const PlayScreen = ({ navigation }) => {
   const [user, setUser] = useState(null);
   const [favCourse, setFavCourse] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [value, setValue] = useState("");
+  const [coursesList, setCoursesList] = useState(null);
 
   const {userInfo} = useContext(AuthContext);
 
@@ -47,51 +49,20 @@ const PlayScreen = ({ navigation }) => {
   // const image = {uri: "https://golfersglobe.com/media/3220/ballybunion-7th-am.jpg"}
   // const image = {uri: "https://www.hartough.com/uploads/Thumbnails/10th.Augusta.jpg"}
   const image = {uri: "https://www.hartough.com/uploads/Thumbnails/11th-hole-white-dogwood-augusta-national-golf-club-1996.jpg"}
+  const imageForm = {uri: "https://cdn11.bigcommerce.com/s-k5xb3d5nlu/images/stencil/original/products/1018/4626/ANGC13Ri2570-Picture-Frame-Wall-Layouts-24x36-Rich-image1__58726.1647991906.jpg?c=2&imbypass=on&imbypass=on"}
   
 
   // const id = AsyncStorage.getItem('_id');  
 
-  const getFavourites = () => {
-    setIsLoading(true);
-    // let courses = [];
-    // console.log(courses)
-    // let favourites = [];
-    // for(let i = 0; i < userInfo.favourite_courses.length; i++){
-    //     axios
-    //     .get(`https://golf-backend-app.vercel.app/api/courses/${userInfo.favourite_courses[i]}`)
-    //     .then((response) => {
-    //       console.log(response.data);
-    //       // await setFavCourses(favCourses.push(response.data));  
-    //       favourites.push(response.data) 
-    //       // setFavCourse(response.data); 
-    //       // setIsLoading(false);
-    //     })
-    //     .catch((err) => {
-    //       console.error(err);
-    //     });
-    //     setFavCourse(favourites);
-    //     setIsLoading(false);
-    // }
-    // console.log(courses.length) 
-        axios
-        .get(`https://golf-backend-app.vercel.app/api/courses/${userInfo.favourite_courses[0]}`)
-        .then((response) => {
-          // console.log(response.data);
-          // await setFavCourses(favCourses.push(response.data));  
-          setFavCourse(response.data);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-  }
-
   const getCourses = () => {
+    setIsLoading(true);
     axios
     .get("https://golf-backend-app.vercel.app/api/courses")
     .then((response) => {
       // console.log(response.data);
       setCourses(response.data);
+      getCoursesFirst(response.data)
+      setIsLoading(false)
     })  
     .catch((err) => {
       console.error(err);
@@ -99,24 +70,45 @@ const PlayScreen = ({ navigation }) => {
   }
 
   useEffect(() => {
-    getFavourites();
+    getCourses();
 
-    // axios
-    //   .get("https://golf-backend-app.vercel.app/api/courses")
-    //   .then((response) => {
-    //     // console.log(response.data);
-    //     setCourses(response.data);
-    //     // console.log(courses[0]) 
-    //     console.log("second" + id)
-    //     setIsLoading(false) 
-    //   })  
-    //   .catch((err) => {
-    //     console.error(err); 
-    //   });
+
   }, []);
 
+  const getCoursesFirst = (courses) => {
+    if(courses){
+      setCoursesList(courses.filter(
+        (course) =>
+          course.name.toLowerCase().includes(value.toLowerCase()) ||
+          course.location.toLowerCase().includes(value.toLowerCase())
+      ));
+    }
+    Keyboard.dismiss();
+  }
+
+
+
+  const searchCourses = () => {
+    if(courses){
+      setCoursesList(courses.filter(
+        (course) =>
+          course.name.toLowerCase().includes(value.toLowerCase()) ||
+          course.location.toLowerCase().includes(value.toLowerCase())
+      ));
+    }
+    Keyboard.dismiss();
+  }
+
+
+
+  // const coursesList = courses.filter(
+  //                       (course) =>
+  //                         course.name.toLowerCase().includes(value.toLowerCase()) ||
+  //                         course.location.toLowerCase().includes(value.toLowerCase())
+  //                     );
+
  
-  if(isLoading){
+  if(!courses){
     return(
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator color={'black'} size={50} />
@@ -124,31 +116,46 @@ const PlayScreen = ({ navigation }) => {
     )
   }
   else{
-    return(
+    return (
       <View style={styles.container}>
         {/* <View style={styles.card}>
           <Text style={styles.text}>Start a round</Text>
           <SearchBar/>
         </View> */}
-            <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+
+        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+          <View style={styles.top}>
             <MaterialCommunityIcons name="golf" size={84} color="white" />
-              <Text style={styles.start}>Start a Round</Text>
+            <Text style={styles.start}>Start a Round</Text>
+            <SearchBar setValue={setValue} value={value} searchCourses={searchCourses}/>
+          </View>
 
-      <SearchBar/>
-      {/* <PlayCard course={favCourse} onPress={() => navigation.navigate('HoleScreen', { course: favCourse })}/>  */}
-    </ImageBackground>
+          {/* <PlayCard course={favCourse} onPress={() => navigation.navigate('HoleScreen', { course: favCourse })}/> 
+      <PlayCard course={favCourse} onPress={() => navigation.navigate('HoleScreen', { course: favCourse })}/>  */}
+          <FlatList
+            data={coursesList}
+            keyExtractor={(item) => item.name.toString()}
+            renderItem={({ item }) => (
+              <PlayCard
+                course={item}
+                onPress={() =>
+                  navigation.navigate("HoleScreen", { course: item })
+                }
+              />
+            )}
+          />
+        </ImageBackground>
 
-
-      {/* <FlatList
+        {/* <FlatList
           data={favCourse}
           keyExtractor={(item) => item.name.toString()}
           renderItem={({ item }) => (
             <PlayCard course={item} onPress={() => navigation.navigate('HoleScreen', { course: item })}/>
           )}
         /> */}
-      {/* <PlayCard course={favCourse} onPress={() => navigation.navigate('HoleScreen', { course: favCourse })}/>  */}
-      {/* <PlayCard course={favCourse[1]} onPress={() => navigation.navigate('HoleScreen', { course: favCourse[1] })}/>  */}
-      {/* <MapView 
+        {/* <PlayCard course={favCourse} onPress={() => navigation.navigate('HoleScreen', { course: favCourse })}/>  */}
+        {/* <PlayCard course={favCourse[1]} onPress={() => navigation.navigate('HoleScreen', { course: favCourse[1] })}/>  */}
+        {/* <MapView 
       style={styles.map}
       >
       {markers.map(marker => (
@@ -160,8 +167,8 @@ const PlayScreen = ({ navigation }) => {
         />
       ))}
       </MapView> */}
-    </View>
-    )
+      </View>
+    );
   }
 
 
@@ -169,31 +176,37 @@ const PlayScreen = ({ navigation }) => {
 
 
 
-const SearchBar = ({ onSearch }) => { 
-    const [search, setSearch] = useState(''); 
+const SearchBar = ({ setValue, value, searchCourses }) => { 
+    // const [search, setSearch] = useState(''); 
   
     return (
       <View style={styles.container2}>
         <TextInput 
           style={styles.input}
-          value={search}
-          onChangeText={(text) => setSearch(text)}
+          value={value}
+          onChangeText={(text) => setValue(text)} 
           placeholder='Where are you playing today?'
         />
-        <Button color='white' title='Search' onPress={() => onSearch(search)} />
+        <Button color='white' title='Search' onPress={() => searchCourses(value) }/>
         {/* <TouchableOpacity>
           <Text style={styles.search}>Search <MaterialCommunityIcons name="send" size={14} color="white" /></Text>
-        </TouchableOpacity> */}
+        // </TouchableOpacity> */}
       </View> 
     );
   };
 
 const styles = StyleSheet.create({
   container: { 
-    // flex: 1,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'grey'
+  },
+  top: {
+    paddingTop: 120,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 0
   },
   card: {
     // backgroundColor: 'black',
@@ -216,6 +229,7 @@ const styles = StyleSheet.create({
   image: {
     alignItems: 'center',
     justifyContent: 'center',
+    flex: 1,
     width: '100%',
     height: '100%',
     borderRadius: 0,

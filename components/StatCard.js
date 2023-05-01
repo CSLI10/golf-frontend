@@ -7,7 +7,7 @@ const StatCard = ({ stat, icon, onPress }) => {
   return (
     <TouchableOpacity style={styles.cardContainer} onPress={onPress}>
       <Text style={styles.name}>{stat}</Text>
-      <MaterialCommunityIcons name={icon} size={130} color="black" />
+      <MaterialCommunityIcons name={icon} size={110} color="black" />
     </TouchableOpacity>
   );
 };
@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: 'white',
     width: 180,
+    height: 160,
     padding: 10,
     borderRadius: 5,
     shadowColor: '#000',

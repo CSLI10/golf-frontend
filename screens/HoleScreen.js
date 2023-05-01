@@ -120,6 +120,9 @@ const HoleScreen = ({ navigation, route }) => {
       .then((response) => {
         console.log("round submitted");
         console.log(response.data);
+        handleCloseSubmit()
+        setForm(holesForm)
+        navigation.navigate('BottomTabNavigator')
       })
       .catch((err) => {
         console.error(err);
